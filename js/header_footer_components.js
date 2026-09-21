@@ -69,6 +69,7 @@ class SiteFooter extends HTMLElement {
     this.innerHTML = `
       <footer class="site-footer">
         <p>Copyright © <span data-copyright-year>2026</span> Raritan EWC</p>
+        <p>Powered by Google Sheets & GitHub Pages | 感謝 Google 與 GitHub 免費平台資源</p>
       </footer>
     `;
   }
