@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Raritan EWC Pizza Hot 優惠碼">
+  <title>Pizza Hot 優惠碼｜Raritan EWC</title>
+
+  <link rel="stylesheet" href="css/main_styles.css">
+  <link rel="stylesheet" href="css/pizza_hot_css.css">
+
+  <script src="js/header_footer_components.js" defer></script>
+  <script src="js/footer_script.js" defer></script>
+  <script src="js/pizza_hot_js.js" defer></script>
+</head>
+<body class="site-page">
+  <site-header></site-header>
+
+  <main class="pizza-page">
+    <section class="pizza-content" aria-labelledby="pizza-title">
+      <div class="pizza-content__inner">
+        <header class="pizza-heading">
+          <h1 id="pizza-title">Pizza Hot 優惠碼</h1>
+        </header>
+
+        <div class="pizza-toolbar">
+          <p id="pizza-result-count" class="pizza-result-count" aria-live="polite">正在取得優惠資料...</p>
+          <button id="pizza-reload" class="pizza-reload" type="button" hidden>重新載入</button>
+        </div>
+
+        <div id="pizza-loading" class="pizza-loading" role="status">
+          <span class="pizza-loading__spinner" aria-hidden="true"></span>
+          <span>優惠資料載入中</span>
+        </div>
+
+        <div id="pizza-error" class="pizza-message pizza-message--error" role="alert" hidden>
+          <strong>目前無法取得優惠資料</strong>
+          <span>請稍後再試，或按下重新載入。</span>
+        </div>
+
+        <div id="pizza-empty" class="pizza-message" hidden>
+          目前沒有可顯示的優惠資料。
+        </div>
+
+        <div id="pizza-card-grid" class="pizza-card-grid" aria-live="polite"></div>
+      </div>
+    </section>
+  </main>
+
+  <site-footer></site-footer>
+</body>
+</html>
