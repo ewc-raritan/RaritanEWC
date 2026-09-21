@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Raritan EWC KFC 早餐優惠碼">
+  <title>KFC 早餐優惠碼｜Raritan EWC</title>
+
+  <link rel="icon" type="image/png" href="assets/icon/favicon.png">
+  <link rel="stylesheet" href="css/main_styles.css">
+  <link rel="stylesheet" href="css/kfc_breakfast_css.css">
+
+  <script src="js/header_footer_components.js" defer></script>
+  <script src="js/footer_script.js" defer></script>
+  <script src="js/kfc_breakfast_js.js" defer></script>
+</head>
+<body class="site-page">
+  <site-header></site-header>
+
+  <main class="kfc-breakfast-page">
+    <section class="kfc-breakfast-content" aria-labelledby="kfc-breakfast-title">
+      <div class="kfc-breakfast-content__inner">
+        <header class="kfc-breakfast-heading">
+          <h1 id="kfc-breakfast-title">KFC 早餐優惠碼</h1>
+        </header>
+
+        <div class="kfc-breakfast-toolbar">
+          <label class="kfc-breakfast-search-wrap" for="kfc-breakfast-search">
+            <span class="sr-only">搜尋優惠品項</span>
+            <input
+              id="kfc-breakfast-search"
+              class="kfc-breakfast-search"
+              type="search"
+              placeholder="搜尋品項，例如：薯餅、奶茶、蛋撻"
+              autocomplete="off"
+            >
+          </label>
+
+          <p id="kfc-breakfast-result-count" class="kfc-breakfast-result-count" aria-live="polite">
+            正在取得優惠資料...
+          </p>
+        </div>
+
+        <div id="kfc-breakfast-loading" class="kfc-breakfast-loading" role="status">
+          <span class="kfc-breakfast-loading__spinner" aria-hidden="true"></span>
+          <span>優惠資料載入中</span>
+        </div>
+
+        <div id="kfc-breakfast-error" class="kfc-breakfast-message kfc-breakfast-message--error" role="alert" hidden>
+          <strong>目前無法取得優惠資料</strong>
+          <span>請稍後再試，或按下重新載入。</span>
+          <button id="kfc-breakfast-reload" class="kfc-breakfast-reload" type="button">重新載入</button>
+        </div>
+
+        <div id="kfc-breakfast-empty" class="kfc-breakfast-message" hidden>
+          沒有符合搜尋條件的優惠。
+        </div>
+
+        <div id="kfc-breakfast-card-grid" class="kfc-breakfast-card-grid" aria-live="polite"></div>
+      </div>
+    </section>
+  </main>
+
+  <site-footer></site-footer>
+</body>
+</html>

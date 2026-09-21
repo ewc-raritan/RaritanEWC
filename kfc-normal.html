@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Raritan EWC KFC 正餐優惠碼">
+  <title>KFC 正餐優惠碼｜Raritan EWC</title>
+
+  <link rel="icon" type="image/png" href="assets/icon/favicon.png">
+  <link rel="stylesheet" href="css/main_styles.css">
+  <link rel="stylesheet" href="css/kfc_normal_css.css">
+
+  <script src="js/header_footer_components.js" defer></script>
+  <script src="js/footer_script.js" defer></script>
+  <script src="js/kfc_normal_js.js" defer></script>
+</head>
+<body class="site-page">
+  <site-header></site-header>
+
+  <main class="kfc-normal-page">
+    <section class="kfc-normal-content" aria-labelledby="kfc-normal-title">
+      <div class="kfc-normal-content__inner">
+        <header class="kfc-normal-heading">
+          <h1 id="kfc-normal-title">KFC 正餐優惠碼</h1>
+        </header>
+
+        <div class="kfc-normal-toolbar">
+          <label class="kfc-normal-search-wrap" for="kfc-normal-search">
+            <span class="sr-only">搜尋優惠品項</span>
+            <input
+              id="kfc-normal-search"
+              class="kfc-normal-search"
+              type="search"
+              placeholder="搜尋品項，例如：雞塊、咔啦脆雞、蛋撻"
+              autocomplete="off"
+            >
+          </label>
+
+          <p id="kfc-normal-result-count" class="kfc-normal-result-count" aria-live="polite">
+            正在取得優惠資料...
+          </p>
+        </div>
+
+        <div id="kfc-normal-loading" class="kfc-normal-loading" role="status">
+          <span class="kfc-normal-loading__spinner" aria-hidden="true"></span>
+          <span>優惠資料載入中</span>
+        </div>
+
+        <div id="kfc-normal-error" class="kfc-normal-message kfc-normal-message--error" role="alert" hidden>
+          <strong>目前無法取得優惠資料</strong>
+          <span>請稍後再試，或按下重新載入。</span>
+          <button id="kfc-normal-reload" class="kfc-normal-reload" type="button">重新載入</button>
+        </div>
+
+        <div id="kfc-normal-empty" class="kfc-normal-message" hidden>
+          沒有符合搜尋條件的優惠。
+        </div>
+
+        <div id="kfc-normal-card-grid" class="kfc-normal-card-grid" aria-live="polite"></div>
+      </div>
+    </section>
+  </main>
+
+  <site-footer></site-footer>
+</body>
+</html>
