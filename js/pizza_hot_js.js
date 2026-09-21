@@ -1,5 +1,11 @@
 const PIZZA_HOT_API_URL = "https://script.google.com/macros/s/AKfycby5pD8nlMt62GdcAeHZKTj7cKF4xFOigK_Qhn7JV778mCIbwp0sO2eHKSnIt6TL57ZM/exec?api=PIZZA_HOT";
 
+const PIZZA_HOT_CACHE_KEY =    "pizza_hot_cache";
+const PIZZA_HOT_CACHE_TIME_KEY =    "pizza_hot_cache_time";
+
+/* 15分鐘 */
+const CACHE_DURATION =    15 * 60 * 1000;
+
 const pizzaElements = {};
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -10,38 +16,128 @@ document.addEventListener("DOMContentLoaded", () => {
     pizzaElements.count = document.querySelector("#pizza-result-count");
     pizzaElements.reload = document.querySelector("#pizza-reload");
 
-    pizzaElements.reload.addEventListener("click", loadPizzaOffers);
+    pizzaElements.reload.addEventListener(
+        "click",
+        () => {
+
+            localStorage.removeItem(
+                PIZZA_HOT_CACHE_KEY
+            );
+
+            localStorage.removeItem(
+                PIZZA_HOT_CACHE_TIME_KEY
+            );
+
+            loadPizzaOffers(true);
+        }
+    );
+
     loadPizzaOffers();
 });
 
-async function loadPizzaOffers() {
+async function loadPizzaOffers(
+    forceRefresh = false
+) {
+
     setPizzaState("loading");
 
     try {
-        const response = await fetch(PIZZA_HOT_API_URL, {
-            method: "GET",
-            redirect: "follow",
-            cache: "no-store"
-        });
+
+        if (!forceRefresh) {
+
+            const cachedData =
+                localStorage.getItem(
+                    PIZZA_HOT_CACHE_KEY
+                );
+
+            const cachedTime =
+                localStorage.getItem(
+                    PIZZA_HOT_CACHE_TIME_KEY
+                );
+
+            const cacheValid =
+                cachedData &&
+                cachedTime &&
+                (
+                    Date.now() -
+                    Number(cachedTime)
+                ) < CACHE_DURATION;
+
+            if (cacheValid) {
+
+                console.log(
+                    "Pizza Hot 使用本機快取資料"
+                );
+
+                const offers =
+                    JSON.parse(cachedData)
+                        .filter(
+                            isValidPizzaOffer
+                        );
+
+                renderPizzaOffers(
+                    offers
+                );
+
+                return;
+            }
+        }
+
+        const response =
+            await fetch(
+                PIZZA_HOT_API_URL,
+                {
+                    method: "GET",
+                    redirect: "follow",
+                    cache: "no-store"
+                }
+            );
 
         if (!response.ok) {
-            throw new Error(`HTTP ${response.status}`);
+            throw new Error(
+                `HTTP ${response.status}`
+            );
         }
 
-        const data = await response.json();
+        const data =
+            await response.json();
 
         if (!Array.isArray(data)) {
-            throw new Error("API response is not an array");
+            throw new Error(
+                "API response is not an array"
+            );
         }
 
-        const offers = data.filter(isValidPizzaOffer);
-        renderPizzaOffers(offers);
+        localStorage.setItem(
+            PIZZA_HOT_CACHE_KEY,
+            JSON.stringify(data)
+        );
+
+        localStorage.setItem(
+            PIZZA_HOT_CACHE_TIME_KEY,
+            String(Date.now())
+        );
+
+        const offers =
+            data.filter(
+                isValidPizzaOffer
+            );
+
+        renderPizzaOffers(
+            offers
+        );
+
     } catch (error) {
-        console.error("Pizza Hot API 載入失敗：", {
-            name: error.name,
-            message: error.message,
-            stack: error.stack
-        });
+
+        console.error(
+            "Pizza Hot API 載入失敗：",
+            {
+                name: error.name,
+                message: error.message,
+                stack: error.stack
+            }
+        );
+
         setPizzaState("error");
     }
 }
