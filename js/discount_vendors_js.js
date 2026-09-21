@@ -1,5 +1,11 @@
 const DISCOUNT_VENDOR_API_URL = "https://script.google.com/macros/s/AKfycby5pD8nlMt62GdcAeHZKTj7cKF4xFOigK_Qhn7JV778mCIbwp0sO2eHKSnIt6TL57ZM/exec?api=DISCOUNT_VENDOR";
 
+const VENDOR_CACHE_KEY = "discount_vendor_cache";
+const VENDOR_CACHE_TIME_KEY = "discount_vendor_cache_time";
+
+/* 15分鐘 */
+const CACHE_DURATION = 15 * 60 * 1000;
+
 const vendorElements = {};
 let allVendors = [];
 
@@ -15,36 +21,131 @@ document.addEventListener("DOMContentLoaded", () => {
 
   vendorElements.typeFilter.addEventListener("change", filterVendors);
   vendorElements.search.addEventListener("input", filterVendors);
-  vendorElements.reload.addEventListener("click", loadVendors);
+  vendorElements.reload.addEventListener(
+      "click",
+      () => {
+        localStorage.removeItem(
+            VENDOR_CACHE_KEY
+        );
+
+        localStorage.removeItem(
+            VENDOR_CACHE_TIME_KEY
+        );
+
+        loadVendors(true);
+      }
+  );
 
   loadVendors();
 });
 
-async function loadVendors() {
+async function loadVendors(forceRefresh = false) {
+
   setVendorState("loading");
 
   try {
-    const response = await fetch(DISCOUNT_VENDOR_API_URL, {
-      method: "GET",
-      redirect: "follow",
-      cache: "no-store"
-    });
+
+    if (!forceRefresh) {
+
+      const cachedData =
+          localStorage.getItem(
+              VENDOR_CACHE_KEY
+          );
+
+      const cachedTime =
+          localStorage.getItem(
+              VENDOR_CACHE_TIME_KEY
+          );
+
+      const cacheValid =
+          cachedData &&
+          cachedTime &&
+          (
+              Date.now() -
+              Number(cachedTime)
+          ) < CACHE_DURATION;
+
+      if (cacheValid) {
+
+        console.log(
+            "使用本機快取資料"
+        );
+
+        allVendors =
+            JSON.parse(cachedData)
+                .filter(
+                    isValidVendor
+                );
+
+        buildVendorTypeOptions(
+            allVendors
+        );
+
+        renderVendors(
+            allVendors,
+            false
+        );
+
+        return;
+      }
+    }
+
+    const response =
+        await fetch(
+            DISCOUNT_VENDOR_API_URL,
+            {
+              method: "GET",
+              redirect: "follow",
+              cache: "no-store"
+            }
+        );
 
     if (!response.ok) {
-      throw new Error(`HTTP ${response.status}`);
+      throw new Error(
+          `HTTP ${response.status}`
+      );
     }
 
-    const data = await response.json();
+    const data =
+        await response.json();
 
     if (!Array.isArray(data)) {
-      throw new Error("API 回傳格式不是陣列");
+      throw new Error(
+          "API 回傳格式不是陣列"
+      );
     }
 
-    allVendors = data.filter(isValidVendor);
-    buildVendorTypeOptions(allVendors);
-    renderVendors(allVendors, false);
+    localStorage.setItem(
+        VENDOR_CACHE_KEY,
+        JSON.stringify(data)
+    );
+
+    localStorage.setItem(
+        VENDOR_CACHE_TIME_KEY,
+        String(Date.now())
+    );
+
+    allVendors =
+        data.filter(
+            isValidVendor
+        );
+
+    buildVendorTypeOptions(
+        allVendors
+    );
+
+    renderVendors(
+        allVendors,
+        false
+    );
+
   } catch (error) {
-    console.error("特約商店 API 載入失敗：", error);
+
+    console.error(
+        "特約商店 API 載入失敗：",
+        error
+    );
+
     setVendorState("error");
   }
 }
