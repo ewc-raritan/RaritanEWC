@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Raritan EWC 特約商店清單">
+  <title>特約商店｜Raritan EWC</title>
+
+  <link rel="icon" type="image/png" href="assets/icon/favicon.png">
+  <link rel="stylesheet" href="css/min/main_styles.min.css">
+  <link rel="stylesheet" href="css/min/discount_vendors_css.min.css">
+
+  <script src="js/min/header_footer_components.min.js" defer></script>
+  <script src="js/min/footer_script.min.js" defer></script>
+  <script src="js/min/discount_vendors_js.min.js" defer></script>
+</head>
+<body class="site-page">
+  <site-header></site-header>
+
+  <main class="vendor-page">
+    <section class="vendor-content" aria-labelledby="vendor-title">
+      <div class="vendor-content__inner">
+        <header class="vendor-heading">
+          <h1 id="vendor-title">特約商店</h1>
+        </header>
+
+        <div class="vendor-toolbar">
+          <label class="vendor-control vendor-control--type" for="vendor-type-filter">
+            <span class="vendor-control__label">分類</span>
+            <select id="vendor-type-filter" class="vendor-select" disabled>
+              <option value="">全部</option>
+            </select>
+          </label>
+
+          <label class="vendor-control vendor-control--search" for="vendor-search">
+            <span class="vendor-control__label">搜尋商店</span>
+            <input
+              id="vendor-search"
+              class="vendor-search"
+              type="search"
+              placeholder="輸入商店名稱"
+              autocomplete="off"
+              disabled
+            >
+          </label>
+
+          <p id="vendor-result-count" class="vendor-result-count" aria-live="polite">
+            正在取得特約商店資料...
+          </p>
+        </div>
+
+        <div id="vendor-loading" class="vendor-loading" role="status">
+          <span class="vendor-loading__spinner" aria-hidden="true"></span>
+          <span>特約商店資料載入中</span>
+        </div>
+
+        <div id="vendor-error" class="vendor-message vendor-message--error" role="alert" hidden>
+          <strong>目前無法取得特約商店資料</strong>
+          <span>請稍後再試，或按下重新載入。</span>
+          <button id="vendor-reload" class="vendor-reload" type="button">重新載入</button>
+        </div>
+
+        <div id="vendor-empty" class="vendor-message" hidden>
+          沒有符合條件的特約商店。
+        </div>
+
+        <div id="vendor-card-grid" class="vendor-card-grid" aria-live="polite"></div>
+      </div>
+    </section>
+  </main>
+
+  <site-footer></site-footer>
+</body>
+</html>
