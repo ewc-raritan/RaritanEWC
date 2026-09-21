@@ -16,7 +16,7 @@ class SiteHeader extends HTMLElement {
             <div class="nav-dropdown">
              <button class="nav-dropdown__trigger" type="button" aria-expanded="false">福委會服務</button>
               <div class="nav-dropdown__menu">
-                <a href="discount-vendors.html">特約廠商清單</a>
+                <a href="discount-vendors.html">特約商店清單</a>
                 <a href="amot-id.html">AMOT 特約企業識別</a>
                 <a href="pizza-hot.html">Pizza Hot 優惠碼</a>
                 <a href="kfc-breakfast.html">KFC 早餐優惠碼</a>
