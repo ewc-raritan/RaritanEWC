@@ -5,204 +5,208 @@ const PIZZA_HOT_CACHE_TIME_KEY = "pizza_hot_cache_time";
 const CACHE_DURATION = 60 * 60 * 1000;
 
 const pizzaElements = {};
+let allPizzaOffers = [];
 
 document.addEventListener("DOMContentLoaded", () => {
-    pizzaElements.grid = document.querySelector("#pizza-card-grid");
-    pizzaElements.loading = document.querySelector("#pizza-loading");
-    pizzaElements.error = document.querySelector("#pizza-error");
-    pizzaElements.empty = document.querySelector("#pizza-empty");
-    pizzaElements.count = document.querySelector("#pizza-result-count");
-    pizzaElements.reload = document.querySelector("#pizza-reload");
+  pizzaElements.search = document.querySelector("#pizza-search");
+  pizzaElements.grid = document.querySelector("#pizza-card-grid");
+  pizzaElements.loading = document.querySelector("#pizza-loading");
+  pizzaElements.error = document.querySelector("#pizza-error");
+  pizzaElements.empty = document.querySelector("#pizza-empty");
+  pizzaElements.count = document.querySelector("#pizza-result-count");
+  pizzaElements.reload = document.querySelector("#pizza-reload");
 
-    pizzaElements.reload.addEventListener(
-        "click",
-        () => {
+  pizzaElements.search.addEventListener("input", filterPizzaOffers);
 
-            localStorage.removeItem(
-                PIZZA_HOT_CACHE_KEY
-            );
+  pizzaElements.reload.addEventListener("click", () => {
+    clearPizzaCache();
+    loadPizzaOffers(true);
+  });
 
-            localStorage.removeItem(
-                PIZZA_HOT_CACHE_TIME_KEY
-            );
-
-            loadPizzaOffers(true);
-        }
-    );
-
-    loadPizzaOffers();
+  loadPizzaOffers();
 });
 
-async function loadPizzaOffers(
-    forceRefresh = false
-) {
+async function loadPizzaOffers(forceRefresh = false) {
+  setPizzaState("loading");
 
-    setPizzaState("loading");
+  try {
+    if (!forceRefresh) {
+      const cachedOffers = getPizzaCache();
 
-    try {
-
-        if (!forceRefresh) {
-
-            const cachedData =
-                localStorage.getItem(
-                    PIZZA_HOT_CACHE_KEY
-                );
-
-            const cachedTime =
-                localStorage.getItem(
-                    PIZZA_HOT_CACHE_TIME_KEY
-                );
-
-            const cacheValid =
-                cachedData &&
-                cachedTime &&
-                (
-                    Date.now() -
-                    Number(cachedTime)
-                ) < CACHE_DURATION;
-
-            if (cacheValid) {
-
-                console.log(
-                    "Pizza Hot 使用本機快取資料"
-                );
-
-                const offers =
-                    JSON.parse(cachedData)
-                        .filter(
-                            isValidPizzaOffer
-                        );
-
-                renderPizzaOffers(
-                    offers
-                );
-
-                return;
-            }
-        }
-
-        const response =
-            await fetch(
-                PIZZA_HOT_API_URL,
-                {
-                    method: "GET",
-                    redirect: "follow",
-                    cache: "no-store"
-                }
-            );
-
-        if (!response.ok) {
-            throw new Error(
-                `HTTP ${response.status}`
-            );
-        }
-
-        const data =
-            await response.json();
-
-        if (!Array.isArray(data)) {
-            throw new Error(
-                "API response is not an array"
-            );
-        }
-
-        localStorage.setItem(
-            PIZZA_HOT_CACHE_KEY,
-            JSON.stringify(data)
-        );
-
-        localStorage.setItem(
-            PIZZA_HOT_CACHE_TIME_KEY,
-            String(Date.now())
-        );
-
-        const offers =
-            data.filter(
-                isValidPizzaOffer
-            );
-
-        renderPizzaOffers(
-            offers
-        );
-
-    } catch (error) {
-
-        console.error(
-            "Pizza Hot API 載入失敗：",
-            {
-                name: error.name,
-                message: error.message,
-                stack: error.stack
-            }
-        );
-
-        setPizzaState("error");
+      if (cachedOffers !== null) {
+        console.log("[Pizza Hot] 使用本機快取資料");
+        allPizzaOffers = cachedOffers.filter(isValidPizzaOffer);
+        renderPizzaOffers(allPizzaOffers, false);
+        return;
+      }
     }
+
+    console.log("[Pizza Hot] 呼叫 API 取得資料");
+
+    const response = await fetch(PIZZA_HOT_API_URL, {
+      method: "GET",
+      redirect: "follow",
+      cache: "no-store"
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}`);
+    }
+
+    const data = await response.json();
+
+    if (!Array.isArray(data)) {
+      throw new Error("API 回傳格式不是陣列");
+    }
+
+    savePizzaCache(data);
+
+    allPizzaOffers = data.filter(isValidPizzaOffer);
+    renderPizzaOffers(allPizzaOffers, false);
+  } catch (error) {
+    console.error("Pizza Hot API 載入失敗：", {
+      name: error.name,
+      message: error.message,
+      stack: error.stack
+    });
+
+    setPizzaState("error");
+  }
+}
+
+function getPizzaCache() {
+  try {
+    const cachedData = localStorage.getItem(PIZZA_HOT_CACHE_KEY);
+    const cachedTime = localStorage.getItem(PIZZA_HOT_CACHE_TIME_KEY);
+
+    if (!cachedData || !cachedTime) {
+      return null;
+    }
+
+    const cacheAge = Date.now() - Number(cachedTime);
+
+    if (!Number.isFinite(cacheAge) || cacheAge >= CACHE_DURATION) {
+      clearPizzaCache();
+      return null;
+    }
+
+    const parsedData = JSON.parse(cachedData);
+
+    if (!Array.isArray(parsedData)) {
+      clearPizzaCache();
+      return null;
+    }
+
+    return parsedData;
+  } catch (error) {
+    console.warn("Pizza Hot 本機快取讀取失敗，將重新呼叫 API：", error);
+    clearPizzaCache();
+    return null;
+  }
+}
+
+function savePizzaCache(data) {
+  try {
+    localStorage.setItem(PIZZA_HOT_CACHE_KEY, JSON.stringify(data));
+    localStorage.setItem(PIZZA_HOT_CACHE_TIME_KEY, String(Date.now()));
+  } catch (error) {
+    console.warn("Pizza Hot 本機快取寫入失敗：", error);
+  }
+}
+
+function clearPizzaCache() {
+  localStorage.removeItem(PIZZA_HOT_CACHE_KEY);
+  localStorage.removeItem(PIZZA_HOT_CACHE_TIME_KEY);
 }
 
 function isValidPizzaOffer(offer) {
-    return offer && typeof offer === "object" && offer.code && offer.detail;
+  return offer && typeof offer === "object" && offer.code && offer.detail;
 }
 
-function renderPizzaOffers(offers) {
-    pizzaElements.grid.replaceChildren();
+function filterPizzaOffers() {
+  const keyword = pizzaElements.search.value
+    .trim()
+    .toLocaleLowerCase("zh-Hant-TW");
 
-    if (offers.length === 0) {
-        setPizzaState("empty");
-        return;
-    }
+  if (!keyword) {
+    renderPizzaOffers(allPizzaOffers, false);
+    return;
+  }
 
-    const fragment = document.createDocumentFragment();
+  const filteredOffers = allPizzaOffers.filter((offer) =>
+    String(offer.detail)
+      .toLocaleLowerCase("zh-Hant-TW")
+      .includes(keyword)
+  );
 
-    offers.forEach((offer) => {
-        const card = document.createElement("article");
-        card.className = "pizza-card";
+  renderPizzaOffers(filteredOffers, true);
+}
 
-        const code = document.createElement("p");
-        code.className = "pizza-card__code";
-        code.textContent = `優惠代碼 ${String(offer.code)}`;
+function renderPizzaOffers(offers, isSearchResult) {
+  pizzaElements.grid.replaceChildren();
 
-        const detail = document.createElement("p");
-        detail.className = "pizza-card__detail";
-        detail.textContent = String(offer.detail);
+  if (offers.length === 0) {
+    pizzaElements.count.textContent = isSearchResult
+      ? "找不到符合條件的優惠"
+      : "目前沒有優惠資料";
 
-        const endDate = document.createElement("p");
-        endDate.className = "pizza-card__date";
-        endDate.textContent = offer.endDate
-            ? `優惠截止日期：${formatPizzaDate(offer.endDate)}`
-            : "優惠截止日期：未提供";
+    setPizzaState("empty");
+    return;
+  }
 
-        card.append(code, detail, endDate);
-        fragment.append(card);
-    });
+  const fragment = document.createDocumentFragment();
 
-    pizzaElements.grid.append(fragment);
-    pizzaElements.count.textContent = `目前共有 ${offers.length} 組優惠`;
-    setPizzaState("success");
+  offers.forEach((offer) => {
+    const card = document.createElement("article");
+    card.className = "pizza-card";
+
+    const code = document.createElement("p");
+    code.className = "pizza-card__code";
+    code.textContent = `優惠代碼 ${String(offer.code)}`;
+
+    const detail = document.createElement("p");
+    detail.className = "pizza-card__detail";
+    detail.textContent = String(offer.detail);
+
+    const endDate = document.createElement("p");
+    endDate.className = "pizza-card__date";
+    endDate.textContent = offer.endDate
+      ? `優惠截止日期：${formatPizzaDate(offer.endDate)}`
+      : "優惠截止日期：未提供";
+
+    card.append(code, detail, endDate);
+    fragment.append(card);
+  });
+
+  pizzaElements.grid.append(fragment);
+  pizzaElements.count.textContent = isSearchResult
+    ? `找到 ${offers.length} 組優惠`
+    : `目前共有 ${offers.length} 組優惠`;
+
+  setPizzaState("success");
 }
 
 function formatPizzaDate(value) {
-    const match = String(value).match(/^(\d{4})-(\d{2})-(\d{2})$/);
-    return match ? `${match[1]}/${match[2]}/${match[3]}` : String(value);
+  const match = String(value).match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  return match ? `${match[1]}/${match[2]}/${match[3]}` : String(value);
 }
 
 function setPizzaState(state) {
-    pizzaElements.loading.hidden = state !== "loading";
-    pizzaElements.error.hidden = state !== "error";
-    pizzaElements.empty.hidden = state !== "empty";
-    pizzaElements.reload.hidden = state !== "error";
+  pizzaElements.loading.hidden = state !== "loading";
+  pizzaElements.error.hidden = state !== "error";
+  pizzaElements.empty.hidden = state !== "empty";
+  pizzaElements.reload.hidden = state !== "error";
 
-    if (state === "loading") {
-        pizzaElements.grid.replaceChildren();
-        pizzaElements.count.textContent = "正在取得優惠資料...";
-    }
+  if (state === "loading") {
+    pizzaElements.grid.replaceChildren();
+    pizzaElements.search.disabled = true;
+    pizzaElements.count.textContent = "正在取得優惠資料...";
+  } else {
+    pizzaElements.search.disabled = false;
+  }
 
-    if (state === "error") {
-        pizzaElements.grid.replaceChildren();
-        pizzaElements.count.textContent = "優惠資料載入失敗";
-    }
-
-    if (state === "empty") {
-        pizzaElements.count.textContent = "目前沒有優惠資料";
-    }
+  if (state === "error") {
+    pizzaElements.grid.replaceChildren();
+    pizzaElements.count.textContent = "優惠資料載入失敗";
+  }
 }
