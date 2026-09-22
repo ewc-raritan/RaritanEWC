@@ -70,10 +70,10 @@
   justify-content: center;
   min-height: 42px;
   padding: 9px 17px;
-  border: 1px solid rgba(255, 255, 255, 0.18);
+  border: 2px solid rgb(0, 233, 255);
   border-radius: 10px;
   color: #e5edf6;
-  background: var(--navy-soft);
+  background: rgb(0, 55, 151);
   font-size: 0.88rem;
   font-weight: 700;
   line-height: 1.4;
@@ -91,8 +91,8 @@
 .amot-button:hover,
 .amot-button:focus-visible {
   color: #fff;
-  background: #12365d;
-  border-color: rgba(255, 255, 255, 0.35);
+  background: #00356e;
+  border-color: rgb(0, 208, 255);
   transform: translateY(-2px);
   box-shadow: 0 13px 28px rgba(0, 0, 0, 0.24);
   outline: none;
