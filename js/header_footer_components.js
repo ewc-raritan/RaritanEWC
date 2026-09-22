@@ -1,6 +1,6 @@
 class SiteHeader extends HTMLElement {
-  connectedCallback() {
-    this.innerHTML = `
+    connectedCallback() {
+        this.innerHTML = `
       <header class="site-header">
         <div class="site-header__inner">
           <a class="brand" href="index.html" aria-label="Raritan EWC 首頁">Raritan EWC</a>
@@ -30,50 +30,56 @@ class SiteHeader extends HTMLElement {
       </header>
     `;
 
-    const navToggle = this.querySelector('.nav-toggle');
-    const nav = this.querySelector('.primary-nav');
-    const dropdown = this.querySelector('.nav-dropdown');
-    const dropdownButton = this.querySelector('.nav-dropdown__trigger');
+        const navToggle = this.querySelector('.nav-toggle');
+        const nav = this.querySelector('.primary-nav');
+        const dropdown = this.querySelector('.nav-dropdown');
+        const dropdownButton = this.querySelector('.nav-dropdown__trigger');
 
-    navToggle.addEventListener('click', () => {
-      const isOpen = navToggle.getAttribute('aria-expanded') === 'true';
-      navToggle.setAttribute('aria-expanded', String(!isOpen));
-      nav.classList.toggle('is-open', !isOpen);
-    });
+        navToggle.addEventListener('click', () => {
+            const isOpen = navToggle.getAttribute('aria-expanded') === 'true';
+            navToggle.setAttribute('aria-expanded', String(!isOpen));
+            nav.classList.toggle('is-open', !isOpen);
+        });
 
-    dropdownButton.addEventListener('click', (event) => {
-      event.stopPropagation();
-      const isOpen = dropdownButton.getAttribute('aria-expanded') === 'true';
-      dropdownButton.setAttribute('aria-expanded', String(!isOpen));
-      dropdown.classList.toggle('is-open', !isOpen);
-    });
+        dropdownButton.addEventListener('click', (event) => {
+            event.stopPropagation();
+            const isOpen = dropdownButton.getAttribute('aria-expanded') === 'true';
+            dropdownButton.setAttribute('aria-expanded', String(!isOpen));
+            dropdown.classList.toggle('is-open', !isOpen);
+        });
 
-    document.addEventListener('click', (event) => {
-      if (!dropdown.contains(event.target)) {
-        dropdown.classList.remove('is-open');
-        dropdownButton.setAttribute('aria-expanded', 'false');
-      }
-    });
+        document.addEventListener('click', (event) => {
+            if (!dropdown.contains(event.target)) {
+                dropdown.classList.remove('is-open');
+                dropdownButton.setAttribute('aria-expanded', 'false');
+            }
+        });
 
-    window.addEventListener('resize', () => {
-      if (window.innerWidth > 760) {
-        nav.classList.remove('is-open');
-        navToggle.setAttribute('aria-expanded', 'false');
-      }
-    });
-  }
+        window.addEventListener('resize', () => {
+            if (window.innerWidth > 760) {
+                nav.classList.remove('is-open');
+                navToggle.setAttribute('aria-expanded', 'false');
+            }
+        });
+    }
 }
 
 class SiteFooter extends HTMLElement {
-  connectedCallback() {
-    this.innerHTML = `
+    connectedCallback() {
+        this.innerHTML = `
       <footer class="site-footer">
-        <p>Copyright © <span data-copyright-year>2026</span> Raritan EWC</p>
-        <p>Powered by Google Sheets & GitHub Pages | 感謝 Google 與 GitHub 免費平台資源</p>
+        <p>Raritan EWC © <span data-copyright-year>2026</span></p>
+
+        <p class="footer-powered">
+          Powered by
+          <img src="assets/icon/github-icon.webp" alt="GitHub Logo"> GitHub Pages & 
+          <img src="assets/icon/google-apps-script.webp" alt="Google Sheets Logo"> Google Apps Script
+        </p>
       </footer>
     `;
-  }
+    }
 }
+
 
 customElements.define('site-header', SiteHeader);
 customElements.define('site-footer', SiteFooter);
