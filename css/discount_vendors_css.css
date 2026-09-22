@@ -185,7 +185,7 @@
   right: 0;
   left: 0;
   height: 3px;
-  background: linear-gradient(90deg, #4fa19b, #90cab4);
+  background: linear-gradient(90deg, #e6ff00, #00ff9d);
   content: "";
 }
 
@@ -204,7 +204,7 @@
   color: #18302f;
   background: #bce4d7;
   font-size: 0.8rem;
-  font-weight: 900;
+  font-weight: 600;
   letter-spacing: 0.06em;
 }
 
@@ -241,19 +241,19 @@
   gap: 7px;
   min-height: 36px;
   padding: 7px 11px;
-  border: 1px solid rgba(145, 209, 196, 0.35);
+  border: 1px solid rgba(168, 244, 229, 0.35);
   border-radius: 9px;
   color: #eaf8f4;
-  background: rgba(62, 131, 126, 0.32);
+  background: rgba(71, 152, 146, 0.32);
   font-size: 0.82rem;
-  font-weight: 750;
+  font-weight: 400;
   text-decoration: none;
   transition: background 160ms ease, border-color 160ms ease, transform 160ms ease;
 }
 
 .vendor-card__contract:hover,
 .vendor-card__contract:focus-visible {
-  background: rgba(62, 131, 126, 0.52);
+  background: rgba(73, 156, 150, 0.52);
   border-color: rgba(175, 231, 218, 0.65);
   transform: translateY(-1px);
   outline: none;

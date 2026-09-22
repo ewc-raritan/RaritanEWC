@@ -2,11 +2,11 @@
 <html lang="zh-Hant-TW">
 <head>
   <meta charset="UTF-8">
-  <link rel="icon" href="assets/icon/favicon.png" type="image/x-icon">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Raritan EWC Pizza Hot 優惠碼">
   <title>Pizza Hot 優惠碼｜Raritan EWC</title>
 
+  <link rel="icon" type="image/png" href="assets/icon/favicon.png">
   <link rel="stylesheet" href="css/min/main_styles.min.css">
   <link rel="stylesheet" href="css/min/pizza_hot_css.min.css">
 
@@ -22,17 +22,34 @@
       <div class="pizza-content__inner">
         <header class="pizza-heading">
           <h1 id="pizza-title">Pizza Hot 優惠碼</h1>
-          <p>優惠內容請以Pizza Hot實際提供為準。</p>
+          <p>優惠內容請以 Pizza Hot 實際提供為準。</p>
         </header>
 
         <div class="pizza-toolbar">
-          <p id="pizza-result-count" class="pizza-result-count" aria-live="polite">正在取得優惠資料...</p>
-          <button id="pizza-reload" class="pizza-reload" type="button" hidden>重新載入</button>
+          <label class="pizza-search-wrap" for="pizza-search">
+            <span class="sr-only">搜尋優惠品項</span>
+            <input
+              id="pizza-search"
+              class="pizza-search"
+              type="search"
+              placeholder="搜尋品項，例如：烤腿排、芝心腸、超級夏威夷"
+              autocomplete="off"
+              disabled
+            >
+          </label>
+
+          <p id="pizza-result-count" class="pizza-result-count" aria-live="polite">
+            正在取得優惠資料...請稍後...
+          </p>
+
+          <button id="pizza-reload" class="pizza-reload" type="button" hidden>
+            重新載入
+          </button>
         </div>
 
         <div id="pizza-loading" class="pizza-loading" role="status">
           <span class="pizza-loading__spinner" aria-hidden="true"></span>
-          <span>優惠資料載入中</span>
+          <span>優惠資料載入中...</span>
         </div>
 
         <div id="pizza-error" class="pizza-message pizza-message--error" role="alert" hidden>
@@ -41,7 +58,7 @@
         </div>
 
         <div id="pizza-empty" class="pizza-message" hidden>
-          目前沒有可顯示的優惠資料。
+          沒有符合條件的優惠。
         </div>
 
         <div id="pizza-card-grid" class="pizza-card-grid" aria-live="polite"></div>
