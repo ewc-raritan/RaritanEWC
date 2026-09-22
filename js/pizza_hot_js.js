@@ -1,10 +1,8 @@
 const PIZZA_HOT_API_URL = "https://script.google.com/macros/s/AKfycby5pD8nlMt62GdcAeHZKTj7cKF4xFOigK_Qhn7JV778mCIbwp0sO2eHKSnIt6TL57ZM/exec?api=PIZZA_HOT";
 
-const PIZZA_HOT_CACHE_KEY =    "pizza_hot_cache";
-const PIZZA_HOT_CACHE_TIME_KEY =    "pizza_hot_cache_time";
-
-/* 15分鐘 */
-const CACHE_DURATION =    15 * 60 * 1000;
+const PIZZA_HOT_CACHE_KEY = "pizza_hot_cache";
+const PIZZA_HOT_CACHE_TIME_KEY = "pizza_hot_cache_time";
+const CACHE_DURATION = 60 * 60 * 1000;
 
 const pizzaElements = {};
 

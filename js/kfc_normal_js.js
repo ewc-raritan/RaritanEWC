@@ -2,9 +2,7 @@ const KFC_BREAKFAST_API_URL = "https://script.google.com/macros/s/AKfycby5pD8nlM
 
 const KFC_NORMAL_CACHE_KEY = "kfc_normal_cache";
 const KFC_NORMAL_CACHE_TIME_KEY = "kfc_normal_cache_time";
-
-/* 15分鐘 */
-const CACHE_DURATION = 15 * 60 * 1000;
+const CACHE_DURATION = 60 * 60 * 1000;
 
 const kfcBreakfastElements = {};
 let kfcBreakfastOffers = [];
