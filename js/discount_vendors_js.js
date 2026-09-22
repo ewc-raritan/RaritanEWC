@@ -2,9 +2,7 @@ const DISCOUNT_VENDOR_API_URL = "https://script.google.com/macros/s/AKfycby5pD8n
 
 const VENDOR_CACHE_KEY = "discount_vendor_cache";
 const VENDOR_CACHE_TIME_KEY = "discount_vendor_cache_time";
-
-/* 15分鐘 */
-const CACHE_DURATION = 15 * 60 * 1000;
+const CACHE_DURATION = 60 * 60 * 1000;
 
 const vendorElements = {};
 let allVendors = [];
