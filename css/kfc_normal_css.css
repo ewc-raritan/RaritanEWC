@@ -273,3 +273,30 @@
     transition: none;
   }
 }
+
+.kfc-normal-loading__image {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+}
+
+.kfc-normal-loading__text {
+  color: #d5dee8;
+  font-size: 1rem;
+  line-height: 1.5;
+  text-align: center;
+}
+
+#kfc-normal-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+#kfc-normal-loading[hidden] {
+  display: none;
+}
