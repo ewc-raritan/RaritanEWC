@@ -1,0 +1,157 @@
+name: Warm Google Apps Script API Cache
+
+on:
+  schedule:
+    - cron: "8 */2 * * *"
+
+  workflow_dispatch:
+
+jobs:
+  warm-api-cache:
+    name: Warm four API caches
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Call four Google Apps Script APIs
+        shell: bash
+        run: |
+          node <<'NODE'
+          const apis = {
+            discountVendor:
+              "https://script.google.com/macros/s/AKfycby5pD8nlMt62GdcAeHZKTj7cKF4xFOigK_Qhn7JV778mCIbwp0sO2eHKSnIt6TL57ZM/exec?api=DISCOUNT_VENDOR",
+
+            kfcBreakfast:
+              "https://script.google.com/macros/s/AKfycby5pD8nlMt62GdcAeHZKTj7cKF4xFOigK_Qhn7JV778mCIbwp0sO2eHKSnIt6TL57ZM/exec?api=KFC_BREAKFAST",
+
+            kfcNormal:
+              "https://script.google.com/macros/s/AKfycby5pD8nlMt62GdcAeHZKTj7cKF4xFOigK_Qhn7JV778mCIbwp0sO2eHKSnIt6TL57ZM/exec?api=KFC_NORMAL",
+
+            pizzaHot:
+              "https://script.google.com/macros/s/AKfycby5pD8nlMt62GdcAeHZKTj7cKF4xFOigK_Qhn7JV778mCIbwp0sO2eHKSnIt6TL57ZM/exec?api=PIZZA_HOT"
+          };
+
+          const delay = (milliseconds) =>
+            new Promise((resolve) =>
+              setTimeout(resolve, milliseconds)
+            );
+
+          async function callApi(name, url) {
+            console.log(`開始呼叫 ${name}`);
+
+            const controller =
+              new AbortController();
+
+            const timeout = setTimeout(
+              () => controller.abort(),
+              60000
+            );
+
+            try {
+              const response = await fetch(
+                url,
+                {
+                  method: "GET",
+                  redirect: "follow",
+                  cache: "no-store",
+                  signal: controller.signal,
+                  headers: {
+                    Accept: "application/json"
+                  }
+                }
+              );
+
+              if (!response.ok) {
+                throw new Error(
+                  `HTTP ${response.status}`
+                );
+              }
+
+              const data =
+                await response.json();
+
+              if (!Array.isArray(data)) {
+                throw new Error(
+                  "API 回傳格式不是陣列"
+                );
+              }
+
+              console.log(
+                `${name} 呼叫成功，共 ${data.length} 筆資料`
+              );
+
+              return {
+                name,
+                success: true,
+                count: data.length
+              };
+            } finally {
+              clearTimeout(timeout);
+            }
+          }
+
+          async function main() {
+            const results = [];
+
+            for (
+              const [name, url] of
+              Object.entries(apis)
+            ) {
+              try {
+                const result =
+                  await callApi(name, url);
+
+                results.push(result);
+              } catch (error) {
+                console.error(
+                  `${name} 呼叫失敗：`,
+                  error.message
+                );
+
+                results.push({
+                  name,
+                  success: false,
+                  error: error.message
+                });
+              }
+
+              await delay(2000);
+            }
+
+            console.log(
+              "執行結果：",
+              JSON.stringify(
+                results,
+                null,
+                2
+              )
+            );
+
+            const failed =
+              results.filter(
+                (result) =>
+                  !result.success
+              );
+
+            if (failed.length > 0) {
+              console.error(
+                `共有 ${failed.length} 支 API 呼叫失敗`
+              );
+
+              process.exit(1);
+            }
+
+            console.log(
+              "四支 API 全部呼叫完成"
+            );
+          }
+
+          main().catch((error) => {
+            console.error(
+              "執行失敗：",
+              error
+            );
+
+            process.exit(1);
+          });
+          NODE
