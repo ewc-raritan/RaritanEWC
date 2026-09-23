@@ -108,7 +108,7 @@
 .vendor-result-count {
   margin: 0 0 12px;
   color: #c4ced9;
-  font-size: 0.9rem;
+  font-size: 1rem;
   white-space: nowrap;
 }
 
@@ -338,4 +338,24 @@
   .vendor-card__contract {
     transition: none;
   }
+}
+
+.vendor-loading__image {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+}
+
+#vendor-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+#vendor-loading[hidden] {
+  display: none;
 }
