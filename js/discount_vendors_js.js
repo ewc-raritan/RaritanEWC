@@ -4,20 +4,15 @@ const DISCOUNT_VENDOR_API_URL =
 const DISCOUNT_VENDOR_API_URL_BK =
     "https://script.google.com/macros/s/AKfycbzApcrcbGcv5sM6o857xlJXzqp_yFg18VPKIVOShRzCeRouhqrK3Q5tgMHG3yXqZN91Pw/exec?api=DISCOUNT_VENDOR";
 
-const VENDOR_CACHE_KEY =
-    "discount_vendor_cache";
+const VENDOR_CACHE_KEY = "discount_vendor_cache";
 
-const VENDOR_CACHE_TIME_KEY =
-    "discount_vendor_cache_time";
+const VENDOR_CACHE_TIME_KEY = "discount_vendor_cache_time";
 
-const CACHE_DURATION =
-    60 * 60 * 1000;
+const CACHE_DURATION = 60 * 60 * 1000;
 
-const RETRY_DELAY =
-    1000;
+const RETRY_DELAY = 1000;
 
-const VENDOR_LOADING_IMAGE =
-    "assets/icon/loading.webp";
+const VENDOR_LOADING_IMAGE = "assets/icon/loading.webp";
 
 const vendorElements = {};
 
@@ -157,7 +152,7 @@ async function loadVendors(
         );
     } catch (error) {
         console.error(
-            "特約商店 API 三次連線皆失敗：",
+            "特約商店 API 四次連線皆失敗：",
             error
         );
 
@@ -215,13 +210,33 @@ async function fetchVendorDataWithBackup() {
     try {
         return await fetchVendorApi(
             DISCOUNT_VENDOR_API_URL_BK,
-            "備援 API 連線"
+            "備援 API 第一次連線"
         );
     } catch (error) {
         lastError = error;
 
         console.error(
-            "備援 API 連線失敗：",
+            "備援 API 第一次連線失敗：",
+            error
+        );
+    }
+
+    setVendorLoadingText(
+        "第四次連線嘗試..."
+    );
+
+    await wait(RETRY_DELAY);
+
+    try {
+        return await fetchVendorApi(
+            DISCOUNT_VENDOR_API_URL_BK,
+            "備援 API 第二次連線"
+        );
+    } catch (error) {
+        lastError = error;
+
+        console.error(
+            "備援 API 第二次連線失敗：",
             error
         );
     }

@@ -4,19 +4,15 @@ const KFC_BREAKFAST_API_URL =
 const KFC_BREAKFAST_API_URL_BK =
     "https://script.google.com/macros/s/AKfycbzApcrcbGcv5sM6o857xlJXzqp_yFg18VPKIVOShRzCeRouhqrK3Q5tgMHG3yXqZN91Pw/exec?api=KFC_BREAKFAST";
 
-const KFC_BREAKFAST_CACHE_KEY =
-    "kfc_breakfast_cache";
+const KFC_BREAKFAST_CACHE_KEY = "kfc_breakfast_cache";
 
-const KFC_BREAKFAST_CACHE_TIME_KEY =
-    "kfc_breakfast_cache_time";
+const KFC_BREAKFAST_CACHE_TIME_KEY = "kfc_breakfast_cache_time";
 
 const CACHE_DURATION = 60 * 60 * 1000;
 
-const KFC_BREAKFAST_RETRY_DELAY =
-    1000;
+const KFC_BREAKFAST_RETRY_DELAY = 1000;
 
-const KFC_BREAKFAST_LOADING_IMAGE =
-    "assets/icon/loading.webp";
+const KFC_BREAKFAST_LOADING_IMAGE = "assets/icon/loading.webp";
 
 const kfcBreakfastElements = {};
 
@@ -139,7 +135,7 @@ async function loadKfcBreakfastOffers(
         );
     } catch (error) {
         console.error(
-            "KFC 早餐優惠 API 三次連線皆失敗：",
+            "KFC 早餐優惠 API 四次連線皆失敗：",
             error
         );
 
@@ -201,13 +197,35 @@ async function fetchKfcBreakfastDataWithBackup() {
     try {
         return await fetchKfcBreakfastApi(
             KFC_BREAKFAST_API_URL_BK,
-            "KFC 早餐備援 API 連線"
+            "KFC 早餐備援 API 第一次連線"
         );
     } catch (error) {
         lastError = error;
 
         console.error(
-            "KFC 早餐備援 API 連線失敗：",
+            "KFC 早餐備援 API 第一次連線失敗：",
+            error
+        );
+    }
+
+    setKfcBreakfastLoadingText(
+        "第四次次連線嘗試..."
+    );
+
+    await waitKfcBreakfastRetry(
+        KFC_BREAKFAST_RETRY_DELAY
+    );
+
+    try {
+        return await fetchKfcBreakfastApi(
+            KFC_BREAKFAST_API_URL_BK,
+            "KFC 早餐備援 API 第二次連線"
+        );
+    } catch (error) {
+        lastError = error;
+
+        console.error(
+            "KFC 早餐備援 API 第二次連線失敗：",
             error
         );
     }
