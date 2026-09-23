@@ -4,20 +4,15 @@ const KFC_NORMAL_API_URL =
 const KFC_NORMAL_API_URL_BK =
     "https://script.google.com/macros/s/AKfycbzApcrcbGcv5sM6o857xlJXzqp_yFg18VPKIVOShRzCeRouhqrK3Q5tgMHG3yXqZN91Pw/exec?api=KFC_NORMAL";
 
-const KFC_NORMAL_CACHE_KEY =
-    "kfc_normal_cache";
+const KFC_NORMAL_CACHE_KEY = "kfc_normal_cache";
 
-const KFC_NORMAL_CACHE_TIME_KEY =
-    "kfc_normal_cache_time";
+const KFC_NORMAL_CACHE_TIME_KEY = "kfc_normal_cache_time";
 
-const KFC_NORMAL_CACHE_DURATION =
-    60 * 60 * 1000;
+const KFC_NORMAL_CACHE_DURATION = 60 * 60 * 1000;
 
-const KFC_NORMAL_RETRY_DELAY =
-    1000;
+const KFC_NORMAL_RETRY_DELAY = 1000;
 
-const KFC_NORMAL_LOADING_IMAGE =
-    "assets/icon/loading.webp";
+const KFC_NORMAL_LOADING_IMAGE = "assets/icon/loading.webp";
 
 const kfcNormalElements = {};
 
@@ -138,7 +133,7 @@ async function loadKfcNormalOffers(
         );
     } catch (error) {
         console.error(
-            "KFC 一般優惠 API 三次連線皆失敗：",
+            "KFC 一般優惠 API 四次連線皆失敗：",
             error
         );
 
@@ -200,13 +195,35 @@ async function fetchKfcNormalDataWithBackup() {
     try {
         return await fetchKfcNormalApi(
             KFC_NORMAL_API_URL_BK,
-            "KFC 一般優惠備援 API 連線"
+            "KFC 一般優惠備援 API 第一次連線"
         );
     } catch (error) {
         lastError = error;
 
         console.error(
-            "KFC 一般優惠備援 API 連線失敗：",
+            "KFC 一般優惠備援 API 第一次連線失敗：",
+            error
+        );
+    }
+
+    setKfcNormalLoadingText(
+        "第四次連線嘗試..."
+    );
+
+    await waitKfcNormalRetry(
+        KFC_NORMAL_RETRY_DELAY
+    );
+
+    try {
+        return await fetchKfcNormalApi(
+            KFC_NORMAL_API_URL_BK,
+            "KFC 一般優惠備援 API 第二次連線"
+        );
+    } catch (error) {
+        lastError = error;
+
+        console.error(
+            "KFC 一般優惠備援 API 第二次連線失敗：",
             error
         );
     }
