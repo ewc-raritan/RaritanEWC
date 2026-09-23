@@ -1,0 +1,538 @@
+const CONFIG = {
+  DISCOUNT_VENDOR: "Discount_Vendor",
+  KFC_BREAKFAST: "KFC_Breakfast",
+  KFC_NORMAL: "KFC_Normal",
+  PIZZA_HOT: "Pizza_Hot"
+};
+
+const CACHE_SECONDS = 7080;
+
+const MAX_CACHE_BYTES = 99 * 1024;
+
+const LOCK_WAIT_MILLISECONDS = 20000;
+
+function doGet(e) {
+  const api = e?.parameter?.api || "DISCOUNT_VENDOR";
+
+  switch (api) {
+    case "DISCOUNT_VENDOR":
+      return getDiscountVendor();
+
+    case "KFC_BREAKFAST":
+      return getKfcData(CONFIG.KFC_BREAKFAST);
+
+    case "KFC_NORMAL":
+      return getKfcData(CONFIG.KFC_NORMAL);
+
+    case "PIZZA_HOT":
+      return getPizzaHot();
+
+    default:
+      return jsonResponse({
+        error: "Unknown API"
+      });
+  }
+}
+
+function getDiscountVendor() {
+  const cacheKey = "DISCOUNT_VENDOR_V2";
+
+  return getCachedJsonResponse(
+    cacheKey,
+    function () {
+      const sheet = SpreadsheetApp
+        .getActiveSpreadsheet()
+        .getSheetByName(CONFIG.DISCOUNT_VENDOR);
+
+      const lastRow = sheet.getLastRow();
+
+      if (lastRow < 2) {
+        return [];
+      }
+
+      const values = sheet
+        .getRange(1, 1, lastRow, 8)
+        .getDisplayValues();
+
+      const richTexts = sheet
+        .getRange(1, 4, lastRow, 1)
+        .getRichTextValues();
+
+      const today = getTodayString();
+      const result = [];
+
+      let emptyCount = 0;
+
+      for (let i = 1; i < values.length; i++) {
+        const row = values[i];
+
+        if (!row[0]) {
+          emptyCount++;
+
+          if (emptyCount >= 2) {
+            break;
+          }
+
+          continue;
+        }
+
+        emptyCount = 0;
+
+        const startDate = row[5];
+        const endDate = row[6];
+
+        if (!isDateCurrentlyActive(
+          startDate,
+          endDate,
+          today
+        )) {
+          continue;
+        }
+
+        const contractCell = richTexts[i][0];
+
+        result.push({
+          companyName: row[0],
+          type: row[1],
+
+          contract_name: contractCell
+            ? contractCell.getText()
+            : "",
+
+          contract_url: contractCell
+            ? contractCell.getLinkUrl()
+            : "",
+
+          endDate: endDate,
+          note: row[7]
+        });
+      }
+
+      return result;
+    }
+  );
+}
+
+function getKfcData(sheetName) {
+  const cacheKey = sheetName + "_V2";
+
+  return getCachedJsonResponse(
+    cacheKey,
+    function () {
+      const sheet = SpreadsheetApp
+        .getActiveSpreadsheet()
+        .getSheetByName(sheetName);
+
+      const lastRow = sheet.getLastRow();
+
+      if (lastRow < 2) {
+        return [];
+      }
+
+      const values = sheet
+        .getRange(1, 1, lastRow, 5)
+        .getDisplayValues();
+
+      const today = getTodayString();
+      const result = [];
+
+      let emptyCount = 0;
+
+      for (let i = 1; i < values.length; i++) {
+        const row = values[i];
+
+        if (!row[0]) {
+          emptyCount++;
+
+          if (emptyCount >= 2) {
+            break;
+          }
+
+          continue;
+        }
+
+        emptyCount = 0;
+
+        const code = row[0];
+        const detail = row[1];
+        const startDate = row[3];
+        const endDate = row[4];
+
+        if (!isDateCurrentlyActive(
+          startDate,
+          endDate,
+          today
+        )) {
+          continue;
+        }
+
+        const parsed = parseKfcDetail(detail);
+
+        result.push({
+          code: code,
+          endDate: endDate,
+          detail: detail,
+          discountPrice: parsed.discountPrice,
+          originalPrice: parsed.originalPrice
+        });
+      }
+
+      return result;
+    }
+  );
+}
+
+function getPizzaHot() {
+  const cacheKey = "PIZZA_HOT_V2";
+
+  return getCachedJsonResponse(
+    cacheKey,
+    function () {
+      const sheet = SpreadsheetApp
+        .getActiveSpreadsheet()
+        .getSheetByName(CONFIG.PIZZA_HOT);
+
+      const lastRow = sheet.getLastRow();
+
+      if (lastRow < 2) {
+        return [];
+      }
+
+      const values = sheet
+        .getRange(1, 1, lastRow, 5)
+        .getDisplayValues();
+
+      const today = getTodayString();
+      const result = [];
+
+      let emptyCount = 0;
+
+      for (let i = 1; i < values.length; i++) {
+        const row = values[i];
+
+        if (!row[0]) {
+          emptyCount++;
+
+          if (emptyCount >= 2) {
+            break;
+          }
+
+          continue;
+        }
+
+        emptyCount = 0;
+
+        const startDate = row[3];
+        const endDate = row[4];
+
+        if (!isDateCurrentlyActive(
+          startDate,
+          endDate,
+          today
+        )) {
+          continue;
+        }
+
+        result.push({
+          code: row[0],
+          detail: row[1],
+          endDate: endDate
+        });
+      }
+
+      return result;
+    }
+  );
+}
+
+function getCachedJsonResponse(
+  cacheKey,
+  dataLoader
+) {
+  const cache = CacheService.getScriptCache();
+
+  const cached = getValidCachedJson(
+    cache,
+    cacheKey
+  );
+
+  if (cached !== null) {
+    return jsonResponse(cached);
+  }
+
+  const lock = LockService.getScriptLock();
+  let lockAcquired = false;
+
+  try {
+    lockAcquired = lock.tryLock(
+      LOCK_WAIT_MILLISECONDS
+    );
+
+    if (lockAcquired) {
+      const cachedAfterLock =
+        getValidCachedJson(
+          cache,
+          cacheKey
+        );
+
+      if (cachedAfterLock !== null) {
+        return jsonResponse(cachedAfterLock);
+      }
+    }
+
+    const result = dataLoader();
+
+    putCacheIfWithinLimit(
+      cache,
+      cacheKey,
+      result
+    );
+
+    return jsonResponse(result);
+  } finally {
+    if (lockAcquired) {
+      lock.releaseLock();
+    }
+  }
+}
+
+function getValidCachedJson(
+  cache,
+  cacheKey
+) {
+  const cached = cache.get(cacheKey);
+
+  if (!cached) {
+    return null;
+  }
+
+  try {
+    return JSON.parse(cached);
+  } catch (e) {
+    cache.remove(cacheKey);
+
+    console.log(
+      "Invalid cache removed: " +
+      cacheKey +
+      ", error: " +
+      e
+    );
+
+    return null;
+  }
+}
+
+function putCacheIfWithinLimit(
+  cache,
+  cacheKey,
+  data
+) {
+  const json = JSON.stringify(data);
+
+  const byteSize = Utilities
+    .newBlob(json)
+    .getBytes()
+    .length;
+
+  if (byteSize > MAX_CACHE_BYTES) {
+    console.log(
+      "Cache skipped because data is too large. " +
+      "Key: " +
+      cacheKey +
+      ", bytes: " +
+      byteSize
+    );
+
+    return;
+  }
+
+  cache.put(
+    cacheKey,
+    json,
+    CACHE_SECONDS
+  );
+}
+
+function getTodayString() {
+  const timeZone = SpreadsheetApp
+    .getActiveSpreadsheet()
+    .getSpreadsheetTimeZone();
+
+  return Utilities.formatDate(
+    new Date(),
+    timeZone,
+    "yyyy-MM-dd"
+  );
+}
+
+function isDateCurrentlyActive(
+  startDate,
+  endDate,
+  today
+) {
+  if (!startDate || !endDate) {
+    return false;
+  }
+
+  return (
+    startDate <= today &&
+    today <= endDate
+  );
+}
+
+function parseKfcDetail(detail) {
+  const result = {
+    discountPrice: null,
+    originalPrice: null
+  };
+
+  if (!detail) {
+    return result;
+  }
+
+  try {
+    const text = String(detail)
+      .replace(/\r\n/g, "\n")
+      .replace(/\u00A0/g, " ")
+      .trim();
+
+    const discountPatterns = [
+      /特價\s*(?:NT\s*)?\$?\s*([\d,]+)\s*元?/i,
+      /此套餐合計\s*(?:NT\s*)?\$?\s*([\d,]+)\s*元?/i,
+      /套餐合計\s*(?:NT\s*)?\$?\s*([\d,]+)\s*元?/i,
+      /合計\s*(?:NT\s*)?\$?\s*([\d,]+)\s*元?/i,
+      /=\s*此套餐特價\s*(?:NT\s*)?\$?\s*([\d,]+)\s*元?/i,
+      /=\s*特價\s*(?:NT\s*)?\$?\s*([\d,]+)\s*元?/i,
+      /=\s*(?:NT\s*)?\$\s*([\d,]+)\s*元?/i,
+      /=\s*NT\s*\$?\s*([\d,]+)\s*元?/i,
+      /=\s*\$\s*([\d,]+)\s*元?/i
+    ];
+
+    const originalPatterns = [
+      /最高價值\s*(?:NT\s*)?\$?\s*([\d,]+)\s*元?/i,
+      /原價\s*(?:NT\s*)?\$?\s*([\d,]+)\s*元?/i,
+      /市價\s*(?:NT\s*)?\$?\s*([\d,]+)\s*元?/i
+    ];
+
+    result.discountPrice =
+      findKfcPrice(text, discountPatterns);
+
+    result.originalPrice =
+      findKfcPrice(text, originalPatterns);
+
+    if (
+      result.discountPrice === null ||
+      result.originalPrice === null
+    ) {
+      applyKfcPriceFallback(text, result);
+    }
+  } catch (e) {
+    console.log(
+      "parseKfcDetail error: " + e
+    );
+  }
+
+  return result;
+}
+
+function findKfcPrice(text, patterns) {
+  for (let i = 0; i < patterns.length; i++) {
+    const match = text.match(patterns[i]);
+
+    if (match) {
+      return parseKfcPriceNumber(match[1]);
+    }
+  }
+
+  return null;
+}
+
+function parseKfcPriceNumber(value) {
+  if (
+    value === null ||
+    value === undefined
+  ) {
+    return null;
+  }
+
+  const number = Number(
+    String(value).replace(/,/g, "")
+  );
+
+  return Number.isFinite(number)
+    ? number
+    : null;
+}
+
+function applyKfcPriceFallback(
+  text,
+  result
+) {
+  if (
+    result.discountPrice !== null &&
+    result.originalPrice !== null
+  ) {
+    return;
+  }
+
+  if (/省\s*(?:NT\s*)?\$/i.test(text)) {
+    return;
+  }
+
+  const hasOriginalPriceContext =
+    /原價|最高價值|市價/i.test(text);
+
+  if (!hasOriginalPriceContext) {
+    return;
+  }
+
+  const prices = [];
+
+  const priceRegex =
+    /(?:NT\s*)?\$\s*([\d,]+)\s*元?/gi;
+
+  let match;
+
+  while (
+    (match = priceRegex.exec(text)) !== null
+  ) {
+    const price =
+      parseKfcPriceNumber(match[1]);
+
+    if (price !== null) {
+      prices.push(price);
+    }
+  }
+
+  if (prices.length !== 2) {
+    return;
+  }
+
+  const lowerPrice =
+    Math.min(prices[0], prices[1]);
+
+  const higherPrice =
+    Math.max(prices[0], prices[1]);
+
+  if (lowerPrice === higherPrice) {
+    return;
+  }
+
+  if (result.discountPrice === null) {
+    result.discountPrice = lowerPrice;
+  }
+
+  if (result.originalPrice === null) {
+    result.originalPrice = higherPrice;
+  }
+}
+
+function jsonResponse(data) {
+  return ContentService
+    .createTextOutput(
+      JSON.stringify(data)
+    )
+    .setMimeType(
+      ContentService.MimeType.JSON
+    );
+}
