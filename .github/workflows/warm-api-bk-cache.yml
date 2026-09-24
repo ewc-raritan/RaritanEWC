@@ -2,7 +2,7 @@ name: Refresh Google Apps Script BK API Cache
 
 on:
   schedule:
-    - cron: "47 */2 * * *"
+    - cron: "47 */3 * * *"
 
   workflow_dispatch:
 
