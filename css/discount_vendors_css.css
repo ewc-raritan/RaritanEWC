@@ -169,11 +169,11 @@
   display: flex;
   flex-direction: column;
   min-width: 0;
-  min-height: 235px;
-  padding: 23px;
+  min-height: 250px;
+  padding: 20px;
   overflow: hidden;
   border: 1px solid rgba(255, 255, 255, 0.13);
-  border-radius: 18px;
+  border-radius: 15px;
   background: linear-gradient(145deg, rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.035));
   box-shadow: 0 15px 35px rgba(0, 0, 0, 0.18);
   transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
@@ -191,37 +191,37 @@
 
 .vendor-card:hover {
   transform: translateY(-3px);
-  border-color: rgba(255, 255, 255, 0.24);
+  border-color: rgba(255, 255, 255, 0.3);
   box-shadow: 0 20px 44px rgba(0, 0, 0, 0.25);
 }
 
 .vendor-card__type {
   align-self: flex-start;
   margin: 0 0 22px;
-  padding: 6px 11px;
+  padding: 5px 10px;
   border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 9px;
   color: #18302f;
   background: #bce4d7;
-  font-size: 0.8rem;
-  font-weight: 600;
+  font-size: 0.9rem;
+  font-weight: 400;
   letter-spacing: 0.06em;
 }
 
 .vendor-card__name {
   margin: 0;
   color: #f2f6f9;
-  font-size: 1.12rem;
+  font-size: 1.2rem;
   font-weight: 400;
-  line-height: 1.55;
+  line-height: 1.25;
   overflow-wrap: anywhere;
 }
 
 .vendor-card__note {
-  margin: 10px 0 0;
+  margin: 8px 0 0;
   color: #c4ced8;
-  font-size: 0.86rem;
-  line-height: 1.6;
+  font-size: 0.9rem;
+  line-height: 1.25;
   overflow-wrap: anywhere;
 }
 
@@ -240,12 +240,12 @@
   justify-content: center;
   gap: 7px;
   min-height: 36px;
-  padding: 7px 11px;
+  padding: 6px 10px;
   border: 1px solid rgba(168, 244, 229, 0.35);
-  border-radius: 9px;
+  border-radius: 10px;
   color: #eaf8f4;
-  background: rgba(71, 152, 146, 0.32);
-  font-size: 0.82rem;
+  background: rgba(66, 133, 128, 0.32);
+  font-size: 0.9rem;
   font-weight: 400;
   text-decoration: none;
   transition: background 160ms ease, border-color 160ms ease, transform 160ms ease;
@@ -253,7 +253,7 @@
 
 .vendor-card__contract:hover,
 .vendor-card__contract:focus-visible {
-  background: rgba(73, 156, 150, 0.52);
+  background: rgba(73, 156, 150, 0.45);
   border-color: rgba(175, 231, 218, 0.65);
   transform: translateY(-1px);
   outline: none;
