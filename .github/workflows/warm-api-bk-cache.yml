@@ -1,0 +1,174 @@
+name: Refresh Google Apps Script API Cache
+
+on:
+  schedule:
+    - cron: "47 */2 * * *"
+
+  workflow_dispatch:
+
+jobs:
+  refresh-api-cache:
+    name: Refresh four API caches
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Refresh Google Apps Script caches
+        shell: bash
+        run: |
+          node <<'NODE'
+          const refreshUrl =
+            "https://script.google.com/macros/s/AKfycbzApcrcbGcv5sM6o857xlJXzqp_yFg18VPKIVOShRzCeRouhqrK3Q5tgMHG3yXqZN91Pw/exec?api=CACHE_REFRESH";
+
+          const delay = (milliseconds) =>
+            new Promise((resolve) =>
+              setTimeout(resolve, milliseconds)
+            );
+
+          async function refreshOnce(attempt) {
+            console.log(
+              `開始刷新 Cache，第 ${attempt} 次嘗試`
+            );
+
+            const controller =
+              new AbortController();
+
+            const timeout = setTimeout(
+              () => controller.abort(),
+              180000
+            );
+
+            try {
+              const url = new URL(refreshUrl);
+
+              url.searchParams.set(
+                "_",
+                Date.now().toString()
+              );
+
+              const response = await fetch(
+                url.toString(),
+                {
+                  method: "GET",
+                  redirect: "follow",
+                  cache: "no-store",
+                  signal: controller.signal,
+                  headers: {
+                    Accept: "application/json",
+                    "Cache-Control": "no-cache"
+                  }
+                }
+              );
+
+              if (!response.ok) {
+                throw new Error(
+                  `HTTP ${response.status}`
+                );
+              }
+
+              const responseText =
+                await response.text();
+
+              let data;
+
+              try {
+                data = JSON.parse(
+                  responseText
+                );
+              } catch (error) {
+                throw new Error(
+                  "API 回傳格式不是 JSON：" +
+                  responseText.slice(0, 200)
+                );
+              }
+
+              if (
+                typeof data !== "object" ||
+                data === null ||
+                !Array.isArray(data.results)
+              ) {
+                throw new Error(
+                  "API 回傳格式不正確"
+                );
+              }
+
+              console.log(
+                "刷新結果：",
+                JSON.stringify(
+                  data,
+                  null,
+                  2
+                )
+              );
+
+              if (!data.success) {
+                const failedApis =
+                  data.results
+                    .filter(
+                      (result) =>
+                        !result.success
+                    )
+                    .map(
+                      (result) =>
+                        result.api
+                    );
+
+                throw new Error(
+                  "部分 API 刷新失敗：" +
+                  failedApis.join(", ")
+                );
+              }
+
+              console.log(
+                "四支 API Cache 全部刷新成功"
+              );
+
+              return data;
+            } finally {
+              clearTimeout(timeout);
+            }
+          }
+
+          async function main() {
+            const maxAttempts = 4;
+
+            for (
+              let attempt = 1;
+              attempt <= maxAttempts;
+              attempt++
+            ) {
+              try {
+                await refreshOnce(attempt);
+                return;
+              } catch (error) {
+                console.error(
+                  `第 ${attempt} 次刷新失敗：${error.message}`
+                );
+
+                if (attempt === maxAttempts) {
+                  throw error;
+                }
+
+                const waitMilliseconds =
+                  attempt * 15000;
+
+                console.log(
+                  `等待 ${waitMilliseconds / 1000} 秒後重試`
+                );
+
+                await delay(
+                  waitMilliseconds
+                );
+              }
+            }
+          }
+
+          main().catch((error) => {
+            console.error(
+              "Cache 刷新最終失敗：",
+              error
+            );
+
+            process.exit(1);
+          });
+          NODE
