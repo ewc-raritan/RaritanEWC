@@ -1,62 +1,61 @@
-name: Warm Google Apps Script API Cache
+name: Refresh Google Apps Script API Cache
 
 on:
   schedule:
-    - cron: "8 */2 * * *"
+    - cron: "17 * * * *"
 
   workflow_dispatch:
 
 jobs:
-  warm-api-cache:
-    name: Warm four API caches
+  refresh-api-cache:
+    name: Refresh four API caches
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
 
     steps:
-      - name: Call four Google Apps Script APIs
+      - name: Refresh Google Apps Script caches
         shell: bash
         run: |
           node <<'NODE'
-          const apis = {
-            discountVendor:
-              "https://script.google.com/macros/s/AKfycby5pD8nlMt62GdcAeHZKTj7cKF4xFOigK_Qhn7JV778mCIbwp0sO2eHKSnIt6TL57ZM/exec?api=DISCOUNT_VENDOR",
-
-            kfcBreakfast:
-              "https://script.google.com/macros/s/AKfycby5pD8nlMt62GdcAeHZKTj7cKF4xFOigK_Qhn7JV778mCIbwp0sO2eHKSnIt6TL57ZM/exec?api=KFC_BREAKFAST",
-
-            kfcNormal:
-              "https://script.google.com/macros/s/AKfycby5pD8nlMt62GdcAeHZKTj7cKF4xFOigK_Qhn7JV778mCIbwp0sO2eHKSnIt6TL57ZM/exec?api=KFC_NORMAL",
-
-            pizzaHot:
-              "https://script.google.com/macros/s/AKfycby5pD8nlMt62GdcAeHZKTj7cKF4xFOigK_Qhn7JV778mCIbwp0sO2eHKSnIt6TL57ZM/exec?api=PIZZA_HOT"
-          };
+          const refreshUrl =
+            "https://script.google.com/macros/s/AKfycby5pD8nlMt62GdcAeHZKTj7cKF4xFOigK_Qhn7JV778mCIbwp0sO2eHKSnIt6TL57ZM/exec?api=CACHE_REFRESH";
 
           const delay = (milliseconds) =>
             new Promise((resolve) =>
               setTimeout(resolve, milliseconds)
             );
 
-          async function callApi(name, url) {
-            console.log(`開始呼叫 ${name}`);
+          async function refreshOnce(attempt) {
+            console.log(
+              `開始刷新 Cache，第 ${attempt} 次嘗試`
+            );
 
             const controller =
               new AbortController();
 
             const timeout = setTimeout(
               () => controller.abort(),
-              60000
+              180000
             );
 
             try {
+              const url = new URL(refreshUrl);
+
+              url.searchParams.set(
+                "_",
+                Date.now().toString()
+              );
+
               const response = await fetch(
-                url,
+                url.toString(),
                 {
                   method: "GET",
                   redirect: "follow",
                   cache: "no-store",
                   signal: controller.signal,
                   headers: {
-                    Accept: "application/json"
+                    Accept: "application/json",
+                    "Cache-Control": "no-cache"
                   }
                 }
               );
@@ -67,88 +66,106 @@ jobs:
                 );
               }
 
-              const data =
-                await response.json();
+              const responseText =
+                await response.text();
 
-              if (!Array.isArray(data)) {
+              let data;
+
+              try {
+                data = JSON.parse(
+                  responseText
+                );
+              } catch (error) {
                 throw new Error(
-                  "API 回傳格式不是陣列"
+                  "API 回傳格式不是 JSON：" +
+                  responseText.slice(0, 200)
+                );
+              }
+
+              if (
+                typeof data !== "object" ||
+                data === null ||
+                !Array.isArray(data.results)
+              ) {
+                throw new Error(
+                  "API 回傳格式不正確"
                 );
               }
 
               console.log(
-                `${name} 呼叫成功，共 ${data.length} 筆資料`
+                "刷新結果：",
+                JSON.stringify(
+                  data,
+                  null,
+                  2
+                )
               );
 
-              return {
-                name,
-                success: true,
-                count: data.length
-              };
+              if (!data.success) {
+                const failedApis =
+                  data.results
+                    .filter(
+                      (result) =>
+                        !result.success
+                    )
+                    .map(
+                      (result) =>
+                        result.api
+                    );
+
+                throw new Error(
+                  "部分 API 刷新失敗：" +
+                  failedApis.join(", ")
+                );
+              }
+
+              console.log(
+                "四支 API Cache 全部刷新成功"
+              );
+
+              return data;
             } finally {
               clearTimeout(timeout);
             }
           }
 
           async function main() {
-            const results = [];
+            const maxAttempts = 4;
 
             for (
-              const [name, url] of
-              Object.entries(apis)
+              let attempt = 1;
+              attempt <= maxAttempts;
+              attempt++
             ) {
               try {
-                const result =
-                  await callApi(name, url);
-
-                results.push(result);
+                await refreshOnce(attempt);
+                return;
               } catch (error) {
                 console.error(
-                  `${name} 呼叫失敗：`,
-                  error.message
+                  `第 ${attempt} 次刷新失敗：${error.message}`
                 );
 
-                results.push({
-                  name,
-                  success: false,
-                  error: error.message
-                });
+                if (attempt === maxAttempts) {
+                  throw error;
+                }
+
+                const waitMilliseconds =
+                  attempt * 15000;
+
+                console.log(
+                  `等待 ${waitMilliseconds / 1000} 秒後重試`
+                );
+
+                await delay(
+                  waitMilliseconds
+                );
               }
-
-              await delay(2000);
             }
-
-            console.log(
-              "執行結果：",
-              JSON.stringify(
-                results,
-                null,
-                2
-              )
-            );
-
-            const failed =
-              results.filter(
-                (result) =>
-                  !result.success
-              );
-
-            if (failed.length > 0) {
-              console.error(
-                `共有 ${failed.length} 支 API 呼叫失敗`
-              );
-
-              process.exit(1);
-            }
-
-            console.log(
-              "四支 API 全部呼叫完成"
-            );
           }
 
           main().catch((error) => {
             console.error(
-              "執行失敗：",
+              "Cache 刷新最終失敗：",
               error
             );
 
