@@ -1,4 +1,4 @@
-name: Refresh Google Apps Script API Cache
+name: Refresh Google Apps Script BK API Cache
 
 on:
   schedule:
@@ -8,12 +8,12 @@ on:
 
 jobs:
   refresh-api-cache:
-    name: Refresh four API caches
+    name: Refresh four BK API caches
     runs-on: ubuntu-latest
     timeout-minutes: 15
 
     steps:
-      - name: Refresh Google Apps Script caches
+      - name: Refresh Google Apps Script BK caches
         shell: bash
         run: |
           node <<'NODE'
