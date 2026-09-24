@@ -198,7 +198,7 @@
 .vendor-card__type {
   align-self: flex-start;
   margin: 0 0 22px;
-  padding: 5px 10px;
+  padding: 6px 11px;
   border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 9px;
   color: #18302f;
@@ -240,7 +240,7 @@
   justify-content: center;
   gap: 7px;
   min-height: 36px;
-  padding: 6px 10px;
+  padding: 7px 11px;
   border: 1px solid rgba(168, 244, 229, 0.35);
   border-radius: 10px;
   color: #eaf8f4;
