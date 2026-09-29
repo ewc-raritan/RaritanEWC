@@ -730,8 +730,8 @@ function createVendorCard(vendor) {
 
     endDate.textContent =
         vendor.endDate
-            ? `截止日期：${formatVendorDate(vendor.endDate)}`
-            : "截止日期：未提供";
+            ? `截止日：${formatVendorDate(vendor.endDate)}`
+            : "截止日：未提供";
 
     footer.append(endDate);
     card.append(footer);

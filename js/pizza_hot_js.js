@@ -561,8 +561,8 @@ function renderPizzaOffers(
 
             endDate.textContent =
                 offer.endDate
-                    ? `優惠截止日期：${formatPizzaDate(offer.endDate)}`
-                    : "優惠截止日期：未提供";
+                    ? `截止日：${formatPizzaDate(offer.endDate)}`
+                    : "截止日：未提供";
 
             card.append(
                 code,
