@@ -347,24 +347,24 @@ button {
 }
 
 .service-card__index {
-  font-size: 0.76rem;
-  font-weight: 900;
+  font-size: 0.8rem;
+  font-weight: 800;
   letter-spacing: 0.14em;
-  opacity: 0.54;
+  opacity: 0.6;
 }
 
 .service-card__title {
   margin-top: 20px;
-  font-size: 1.16rem;
-  font-weight: 850;
+  font-size: 1.2rem;
+  font-weight: 600;
   line-height: 1.35;
 }
 
 .service-card__action {
   margin-top: auto;
   padding-top: 28px;
-  font-size: 0.84rem;
-  font-weight: 750;
+  font-size: 0.9rem;
+  font-weight: 400;
 }
 
 .service-card__action span {
@@ -423,13 +423,52 @@ button {
   font-size: 0.9rem;
 }
 
-.footer-powered img {
+.footer-tooltip {
   position: relative;
-  top: 1px;
-  width: 18px;
-  height: 18px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+}
+
+.footer-tooltip img {
+  width: 20px;
+  height: 20px;
   object-fit: contain;
-  border-radius: 5px;
+  border-radius: 3px;
+}
+
+.footer-tooltip::after {
+  content: attr(data-tooltip);
+
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 8px);
+  transform: translateX(-50%);
+
+  padding: 5px 8px;
+
+  color: #fff;
+  background-color: #222;
+
+  font-size: 13px;
+  white-space: nowrap;
+
+  border-radius: 4px;
+
+  opacity: 0;
+  visibility: hidden;
+
+  transition: opacity 0.15s ease;
+
+  pointer-events: none;
+  z-index: 10;
+}
+
+.footer-tooltip:hover::after {
+  opacity: 1;
+  visibility: visible;
 }
 
 @media (prefers-reduced-motion: reduce) {

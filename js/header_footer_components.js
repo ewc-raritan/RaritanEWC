@@ -72,8 +72,13 @@ class SiteFooter extends HTMLElement {
 
         <p class="footer-powered">
           Powered by
-          <img src="assets/icon/github-icon.webp" alt="GitHub Logo"> GitHub Pages & 
-          <img src="assets/icon/google-apps-script.webp" alt="Google Sheets Logo"> Google Apps Script
+          <span class="footer-tooltip" data-tooltip="GitHub Pages">
+          <img src="assets/icon/github-icon.webp" alt="GitHub Logo">
+          </span>
+           & 
+           <span class="footer-tooltip" data-tooltip="Google Apps Script">
+          <img src="assets/icon/google-apps-script.webp" alt="Google Sheets Logo">
+          </span> 
         </p>
       </footer>
     `;
