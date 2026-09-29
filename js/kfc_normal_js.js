@@ -592,8 +592,8 @@ function renderKfcNormalOffers(
 
             endDate.textContent =
                 offer.endDate
-                    ? `優惠截止日期：${formatKfcNormalDate(offer.endDate)}`
-                    : "優惠截止日期：未提供";
+                    ? `截止日：${formatKfcNormalDate(offer.endDate)}`
+                    : "截止日：未提供";
 
             footer.append(endDate);
 

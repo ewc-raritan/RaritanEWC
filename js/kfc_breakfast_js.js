@@ -607,8 +607,8 @@ function renderKfcBreakfastOffers(
 
             endDate.textContent =
                 offer.endDate
-                    ? `優惠截止日期：${formatKfcBreakfastDate(offer.endDate)}`
-                    : "優惠截止日期：未提供";
+                    ? `截止日：${formatKfcBreakfastDate(offer.endDate)}`
+                    : "截止日：未提供";
 
             footer.append(endDate);
 

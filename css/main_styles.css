@@ -133,8 +133,8 @@ button {
   visibility: hidden;
   opacity: 0;
   transform: translateY(-8px);
-  border: 1px solid rgba(255, 255, 255, 0.11);
-  border-radius: 14px;
+  border: 2px solid rgba(255, 255, 255, 0.11);
+  border-radius: 15px;
   background: #0c223d;
   box-shadow: var(--shadow);
   transition:
@@ -155,15 +155,15 @@ button {
   display: block;
   padding: 10px 12px;
   border-radius: 9px;
-  color: #dce7f5;
+  color: #f3f7ff;
   font-size: 0.88rem;
   text-decoration: none;
 }
 
 .nav-dropdown__menu a:hover,
 .nav-dropdown__menu a:focus-visible {
-  color: #fff;
-  background: rgba(255, 255, 255, 0.09);
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.18);
   outline: none;
 }
 
