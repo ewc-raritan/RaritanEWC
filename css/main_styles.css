@@ -59,7 +59,7 @@ button {
   z-index: 1000;
   top: 0;
   height: 50px;
-  background: rgb(59, 0, 62);
+  background: rgb(97, 0, 82);
   border-bottom: 1px solid rgba(255, 255, 255, 0.15);
   backdrop-filter: blur(14px);
 }
@@ -403,7 +403,7 @@ button {
   min-height: 40px;
   padding: 10px;
   color: #fff;
-  background: rgb(59, 0, 62);
+  background: rgb(97, 0, 82);
   border-top: 1px solid rgba(255, 255, 255, 0.07);
   font-size: 0.9rem;
   text-align: center;
