@@ -170,7 +170,7 @@
   flex-direction: column;
   min-width: 0;
   min-height: 250px;
-  padding: 20px;
+  padding: 15px;
   overflow: hidden;
   border: 1px solid rgba(255, 255, 255, 0.13);
   border-radius: 15px;
@@ -210,17 +210,17 @@
 
 .vendor-card__name {
   margin: 0;
-  color: #f2f6f9;
+  color: #ececec;
   font-size: 1.2rem;
   font-weight: 400;
-  line-height: 1.25;
+  line-height: 1.5;
   overflow-wrap: anywhere;
 }
 
 .vendor-card__note {
   margin: 8px 0 0;
-  color: #c4ced8;
-  font-size: 0.9rem;
+  color: #cacaca;
+  font-size: 1rem;
   line-height: 1.25;
   overflow-wrap: anywhere;
   white-space: pre-line;
