@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Raritan EWC 公益專區">
+    <title>公益專區｜Raritan EWC</title>
+
+    <link rel="icon" type="image/png" href="assets/icon/favicon.png">
+    <link rel="stylesheet" href="css/min/main_styles.min.css">
+    <link rel="stylesheet" href="css/min/charity_section_css.min.css">
+
+    <script src="js/min/header_footer_components.min.js" defer></script>
+    <script src="js/min/footer_script.min.js" defer></script>
+    <script src="js/min/charity_section_js.min.js" defer></script>
+</head>
+<body class="site-page">
+<site-header></site-header>
+
+<main class="charity-page">
+    <header class="charity-intro">
+        <h1 class="charity-intro__title">公益專區</h1>
+
+        <div class="charity-intro__description">
+            <p>福委會響應 CSR 精神，攜手公益夥伴傳遞善意。</p>
+            <p>本頁刊登之公益團體均經授權同意，歡迎了解並支持各項公益服務。</p>
+        </div>
+    </header>
+
+    <section class="charity-jump" aria-labelledby="charity-jump-label">
+        <label class="charity-jump__label" id="charity-jump-label" for="charity-card-select">
+            快速前往公益團體
+        </label>
+
+        <div class="charity-jump__select-wrap">
+            <select class="charity-jump__select" id="charity-card-select">
+                <option value="">請選擇公益團體</option>
+            </select>
+            <span class="charity-jump__arrow" aria-hidden="true"></span>
+        </div>
+    </section>
+
+    <section class="charity-list" aria-label="公益團體列表">
+        <!--
+            新增公益團體時，請完整複製一個 article.charity-card 區塊，
+            再修改 Logo、團體名稱、基本資料、介紹、服務與相關連結。
+        -->
+        <article class="charity-card">
+            <div class="charity-card__top">
+                <div class="charity-card__logo-frame">
+                    <img
+                            class="charity-card__logo"
+                            src="assets/img/victory-kitchen_logo.webp"
+                            alt="公益團體名稱 Logo"
+                    >
+                </div>
+
+                <h2 class="charity-card__name">勝利廚房</h2>
+            </div>
+
+            <div class="charity-card__content">
+                <section class="charity-card__section" aria-labelledby="charity-example-info">
+                    <h3 class="charity-card__heading">基本資料</h3>
+
+                    <dl class="charity-details">
+                        <div class="charity-details__row">
+                            <dt>團體名稱</dt>
+                            <dd>財團法人台北市勝利社會福利事業基金會</dd>
+                        </div>
+
+                        <div class="charity-details__row">
+                            <dt>基金會官網</dt>
+                            <dd><a href="https://www.victory.org.tw/" target="_blank">前往官網</a></dd>
+                        </div>
+
+                        <div class="charity-details__row">
+                            <dt>商店名稱</dt>
+                            <dd>
+                                勝利廚房
+                            </dd>
+                        </div>
+
+                        <div class="charity-details__row">
+                            <dt>商店地址</dt>
+                            <dd>
+                                臺北市文山區興隆路2段88號 (<a href="https://share.google/i7FvxrwGDrpDV6RQZ" target="_blank">Google地圖</a>)
+                            </dd>
+                        </div>
+
+                        <div class="charity-details__row">
+                            <dt>勝利廚房官網</dt>
+                            <dd><a href="https://www.victory.org.tw/kitchen/" target="_blank">前往官網</a></dd>
+                        </div>
+
+                        <div class="charity-details__row">
+                            <dt>勝利廚房網購</dt>
+                            <dd><a href="https://www.victory-kitchen.com/" target="_blank">前往網購</a></dd>
+                        </div>
+
+                        <div class="charity-details__row">
+                            <dt>勝利廚房FB</dt>
+                            <dd><a href="www.facebook.com/vkitchentw" target="_blank">前往FB</a></dd>
+                        </div>
+
+                        <div class="charity-details__row">
+                            <dt>電子郵件</dt>
+                            <dd>
+                                <a href="mailto:kitchen@victory.org.tw">kitchen@victory.org.tw</a>
+                            </dd>
+                        </div>
+
+
+                    </dl>
+                </section>
+
+                <section class="charity-card__section" aria-labelledby="charity-example-about">
+                    <h3 class="charity-card__heading">團體介紹</h3>
+
+                    <div class="charity-card__text">
+                        <p>
+                            2014年深秋，有感於「食安其實是人心的問題」，勝利廚房誕生於在台北社企大樓闢建國際雙認證的中央廚房，現已遷移至台北市興岩全齡園區。發揮身障團隊「專注、本分」的特質，打造一座高效能的安心好食產製基地，全系列產品堅持100%純天然、拒絕人工添加及防腐劑，也成為全國第一家以高規央廚提供多元身心障礙者就業的社會企業，由台北市政府頒發社會企業認證。
+                        </p>
+                        <p>
+                            勝利廚房位於台北市興岩全齡園區，結合同屬勝利基金會的樸樹咖啡，提供給大家更優質完善的餐飲體驗，也為身障就業開創更多永續共好的可能。
+                        </p>
+                        <p>
+                            勝利基金會強調「工作價值」，期望身障者經由產能贏得工作尊嚴，因此堅持不主動募款，以具有市場競爭力的產品與服務品質，來與社會大眾對話。
+                        </p>
+
+                    </div>
+                </section>
+
+                <section class="charity-card__section" aria-labelledby="charity-example-service">
+                    <h3 class="charity-card__heading">服務介紹</h3>
+
+                    <div class="charity-card__text">
+                        <p>
+                            勝利廚房有高規的生產設備、穩定的作業團隊，能為企業提供安心好食的客製服務。如果您重視食品的安全，也認同「扶他一把好工作」的社會價值，歡迎與我們合作， 進行符合CSR或ESG的永續採購，共同推動「有責生產、有擇消費」的良善未來。
+                        </p>
+                        <ul class="charity-card__list">
+                            <li>門市餐飲服務</li>
+                            <li>線上購物 (自取/超取/宅配)</li>
+                            <li>企業會議餐食 (可依預算客製化)</li>
+                            <li>企業場地租借服務 (最多可容納40人)</li>
+                            <li>企業大宗採購，單一品項如有採購30盒以上，可享95折、低溫免運的服務</li>
+                            <li>企業茶水間特選咖啡豆</li>
+                        </ul>
+                    </div>
+                </section>
+            </div>
+        </article>
+
+
+        <article class="charity-card">
+            <div class="charity-card__top">
+                <div class="charity-card__logo-frame">
+                    <img
+                            class="charity-card__logo"
+                            src="assets/img/purecoffee-logo.webp"
+                            alt="公益團體名稱 Logo"
+                    >
+                </div>
+
+                <h2 class="charity-card__name">樸樹咖啡</h2>
+            </div>
+
+            <div class="charity-card__content">
+                <section class="charity-card__section" aria-labelledby="charity-example-info">
+                    <h3 class="charity-card__heading">基本資料</h3>
+
+                    <dl class="charity-details">
+                        <div class="charity-details__row">
+                            <dt>團體名稱</dt>
+                            <dd>財團法人台北市勝利社會福利事業基金會</dd>
+                        </div>
+
+                        <div class="charity-details__row">
+                            <dt>基金會官網</dt>
+                            <dd><a href="https://www.victory.org.tw/" target="_blank">前往官網</a></dd>
+                        </div>
+
+                        <div class="charity-details__row">
+                            <dt>商店名稱</dt>
+                            <dd>
+                                樸樹咖啡 (連鎖)
+                            </dd>
+                        </div>
+
+                        <div class="charity-details__row">
+                            <dt>樸樹咖啡官網</dt>
+                            <dd><a href="https://www.victory.org.tw/purecoffee/" target="_blank">前往官網</a></dd>
+                        </div>
+
+                        <div class="charity-details__row">
+                            <dt>樸樹咖啡網購</dt>
+                            <dd><a href="https://www.victory.org.tw/purecoffee/order/" target="_blank">前往網購</a></dd>
+                        </div>
+
+                    </dl>
+                </section>
+
+                <section class="charity-card__section" aria-labelledby="charity-example-about">
+                    <h3 class="charity-card__heading">團體介紹</h3>
+
+                    <div class="charity-card__text">
+                        <p>
+                            有感隨著國人飲食西化，外加國際級或本土新創等品牌的氣氛營造，已讓咖啡館成為常見的台灣街景之一。而近年來超商現煮咖啡等平價咖啡的興起，更讓喝咖啡的風氣更加速普及化。
+                            2019年成立「樸樹咖啡」，致力於咖啡烘培的手作經營，期許藉由「樸樹咖啡」的開發，提供身障者適切的工作機會。
+                        </p>
+                        <p>
+                            樸樹咖啡(Pure Coffee)希望藉由專注的職人精神，一次做好一件事情的全力以赴，打造沒有華麗宣傳，只有單純味道的一杯好咖啡。
+                        </p>
+                        <p>
+                            勝利基金會強調「工作價值」，期望身障者經由產能贏得工作尊嚴，因此堅持不主動募款，以具有市場競爭力的產品與服務品質，來與社會大眾對話。
+                        </p>
+
+                    </div>
+                </section>
+
+                <section class="charity-card__section" aria-labelledby="charity-example-service">
+                    <h3 class="charity-card__heading">服務介紹</h3>
+
+                    <div class="charity-card__text">
+                        <p>
+                            門市清單：
+                        </p>
+                        <ul class="charity-card__list">
+                            <li>台北市興岩店 (勝利廚房)</li>
+                            <li>台北市大安館店</li>
+                            <li>台北市萬華店</li>
+                            <li>台北市古亭店</li>
+                            <li>新北市樹林店</li>
+                            <li>桃園中壢一號店</li>
+                        </ul>
+                    </div>
+                </section>
+            </div>
+        </article>
+
+    </section>
+</main>
+
+<site-footer></site-footer>
+</body>
+</html>

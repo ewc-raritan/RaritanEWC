@@ -22,8 +22,8 @@ class SiteHeader extends HTMLElement {
                 <a href="kfc-breakfast.html">KFC 早餐優惠碼</a>
                 <a href="kfc-normal.html">KFC 正餐優惠碼</a>              
               </div>
-            </div>
-
+            </div>      
+            <a href="charity_section.html">公益專區</a>
             <a href="https://www.raritan.com/ap/tw" target="_blank" rel="noopener noreferrer">公司官網</a>
           </nav>
         </div>
@@ -68,7 +68,7 @@ class SiteFooter extends HTMLElement {
     connectedCallback() {
         this.innerHTML = `
       <footer class="site-footer">
-        <p>Raritan EWC © <span data-copyright-year>2026</span></p>
+        <p>Raritan EWC \u00A9 <span data-copyright-year>2026</span></p>
 
         <p class="footer-powered">
           Powered by

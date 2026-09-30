@@ -324,8 +324,8 @@ button {
   flex-direction: column;
   width: 100%;
   min-width: 0;
-  min-height: 180px;
-  padding: 23px;
+  min-height: 80px;
+  padding: 25px;
   border: 1px solid rgba(12, 27, 42, 0.2);
   border-radius: var(--radius);
   color: #13202e;
@@ -342,19 +342,12 @@ button {
   transform: translateY(-5px);
   box-shadow: 0 19px 42px rgba(0, 0, 0, 0.22);
   filter: saturate(1.05);
-  outline: 3px solid rgba(255, 255, 255, 0.52);
+  outline: 3px solid rgba(255, 255, 255, 0.69);
   outline-offset: 3px;
 }
 
-.service-card__index {
-  font-size: 0.8rem;
-  font-weight: 800;
-  letter-spacing: 0.14em;
-  opacity: 0.6;
-}
-
 .service-card__title {
-  margin-top: 20px;
+  margin-top: 10px;
   font-size: 1.2rem;
   font-weight: 600;
   line-height: 1.35;
@@ -362,7 +355,7 @@ button {
 
 .service-card__action {
   margin-top: auto;
-  padding-top: 28px;
+  padding-top: 10px;
   font-size: 0.9rem;
   font-weight: 400;
 }
@@ -378,23 +371,27 @@ button {
 }
 
 .service-card--blue {
-  background: #c8dceb;
+  background: #c3e6ff;
+}
+
+.service-card--pink{
+  background: #facfff;
 }
 
 .service-card--sand {
-  background: #e7d9bd;
+  background: #fffda6;
 }
 
 .service-card--mint {
-  background: #c8e1d3;
+  background: #cfffe6;
 }
 
 .service-card--rose {
-  background: #e8d0cf;
+  background: #ffcca4;
 }
 
 .service-card--lavender {
-  background: #d7d2e8;
+  background: #d4c6ff;
 }
 
 .site-footer {
