@@ -180,19 +180,19 @@
     margin: 0 0 20px;
     padding: 6px 11px;
     border: 1px solid rgba(255, 255, 255, 0.16);
-    border-radius: 9px;
+    border-radius: 10px;
     color: #1c252e;
     background: #efd0a8;
-    font-size: 0.82rem;
-    font-weight: 900;
+    font-size: 1rem;
+    font-weight: 600;
     letter-spacing: 0.08em;
 }
 
 .pizza-card__detail {
     margin: 0;
     color: #f0f4f8;
-    font-size: 0.96rem;
-    line-height: 1.78;
+    font-size: 1.2rem;
+    line-height: 1.5;
     white-space: pre-line;
     overflow-wrap: anywhere;
 }

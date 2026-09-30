@@ -1,0 +1,125 @@
+<article class="charity-card">
+            <div class="charity-card__top">
+                <div class="charity-card__logo-frame">
+                    <img
+                            class="charity-card__logo"
+                            src="assets/images/charity/example-charity-logo.png"
+                            alt="公益團體名稱 Logo"
+                    >
+                </div>
+
+                <h2 class="charity-card__name">公益團體名稱</h2>
+                <p class="charity-card__summary">可在此填寫公益團體的簡短標語或核心宗旨。</p>
+            </div>
+
+            <div class="charity-card__content">
+                <section class="charity-card__section" aria-labelledby="charity-example-info">
+                    <h3 class="charity-card__heading" id="charity-example-info">基本資料</h3>
+
+                    <dl class="charity-details">
+                        <div class="charity-details__row">
+                            <dt>團體名稱</dt>
+                            <dd>請輸入公益團體的完整名稱</dd>
+                        </div>
+
+                        <div class="charity-details__row">
+                            <dt>服務地區</dt>
+                            <dd>請輸入主要服務地區</dd>
+                        </div>
+
+                        <div class="charity-details__row">
+                            <dt>服務對象</dt>
+                            <dd>請輸入主要服務對象</dd>
+                        </div>
+
+                        <div class="charity-details__row">
+                            <dt>聯絡電話</dt>
+                            <dd>
+                                <a href="tel:+886200000000">02-0000-0000</a>
+                            </dd>
+                        </div>
+
+                        <div class="charity-details__row">
+                            <dt>電子郵件</dt>
+                            <dd>
+                                <a href="mailto:example@example.org.tw">example@example.org.tw</a>
+                            </dd>
+                        </div>
+                    </dl>
+                </section>
+
+                <section class="charity-card__section" aria-labelledby="charity-example-about">
+                    <h3 class="charity-card__heading" id="charity-example-about">團體介紹</h3>
+
+                    <div class="charity-card__text">
+                        <p>
+                            第一段文字區可放置公益團體的成立背景、發展理念、服務宗旨，
+                            以及長期投入的公益項目。
+                        </p>
+                        <p>
+                            如果介紹內容較長，可以繼續增加段落，不需要修改原本的版面結構。
+                        </p>
+
+                    </div>
+                </section>
+
+                <section class="charity-card__section" aria-labelledby="charity-example-service">
+                    <h3 class="charity-card__heading" id="charity-example-service">服務介紹</h3>
+
+                    <div class="charity-card__text">
+                        <p>
+                            第二段文字區可介紹該團體目前提供的服務、公益商品、捐款方式、
+                            志工活動或企業合作內容。
+                        </p>
+
+                        <ul class="charity-card__list">
+                            <li>公益商品或線上購物服務</li>
+                            <li>定期或單次捐款管道</li>
+                            <li>企業合作及員工優惠方案</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <nav class="charity-card__links" aria-label="公益團體相關連結">
+                    <a
+                            class="charity-link charity-link--primary"
+                            href="https://example.org/"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                    >
+                        前往官方網站
+                        <span aria-hidden="true">↗</span>
+                    </a>
+
+                    <a
+                            class="charity-link charity-link--green"
+                            href="https://example.org/shop"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                    >
+                        公益商品
+                        <span aria-hidden="true">↗</span>
+                    </a>
+
+                    <a
+                            class="charity-link charity-link--orange"
+                            href="https://example.org/donate"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                    >
+                        支持捐款
+                        <span aria-hidden="true">↗</span>
+                    </a>
+
+                    <a
+                            class="charity-link charity-link--outline"
+                            href="https://example.org/contact"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                    >
+                        聯絡團體
+                        <span aria-hidden="true">↗</span>
+                    </a>
+                </nav>
+            </div>
+        </article>
