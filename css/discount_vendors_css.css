@@ -223,6 +223,7 @@
   font-size: 0.9rem;
   line-height: 1.25;
   overflow-wrap: anywhere;
+  white-space: pre-line;
 }
 
 .vendor-card__footer {
