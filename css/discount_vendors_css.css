@@ -14,8 +14,8 @@
 
 .vendor-page {
   background:
-    radial-gradient(circle at 82% 12%, rgba(58, 126, 128, 0.2), transparent 34%),
-    linear-gradient(145deg, #171c22 0%, #252b32 58%, #20262d 100%);
+          radial-gradient(circle at 82% 12%, rgba(58, 126, 128, 0.2), transparent 34%),
+          linear-gradient(145deg, #171c22 0%, #252b32 58%, #20262d 100%);
 }
 
 .vendor-content {
