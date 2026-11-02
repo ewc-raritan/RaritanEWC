@@ -172,9 +172,9 @@
   min-height: 250px;
   padding: 15px;
   overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.13);
-  border-radius: 15px;
-  background: linear-gradient(145deg, rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.035));
+  border: 1px solid #6A4C9C;
+  border-radius: 10px;
+  background: linear-gradient(145deg, #3C2F41, #1C1C1C);
   box-shadow: 0 15px 35px rgba(0, 0, 0, 0.18);
   transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
 }
@@ -191,7 +191,7 @@
 
 .vendor-card:hover {
   transform: translateY(-3px);
-  border-color: rgba(255, 255, 255, 0.3);
+  border-color: #B28FCE;
   box-shadow: 0 20px 44px rgba(0, 0, 0, 0.25);
 }
 
@@ -199,29 +199,28 @@
   align-self: flex-start;
   margin: 0 0 22px;
   padding: 6px 11px;
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: 9px;
-  color: #18302f;
-  background: #bce4d7;
+  border-radius: 10px;
+  color:#26453D;
+  background: #A8D8B9;
   font-size: 0.9rem;
-  font-weight: 400;
+  font-weight: 450;
   letter-spacing: 0.06em;
 }
 
 .vendor-card__name {
   margin: 0;
-  color: #ececec;
-  font-size: 1.2rem;
-  font-weight: 400;
-  line-height: 1.5;
+  color: #F8C3CD;
+  font-size: 1.1rem;
+  font-weight: 500;
+  line-height: 1.3;
   overflow-wrap: anywhere;
 }
 
 .vendor-card__note {
   margin: 8px 0 0;
   color: #cacaca;
-  font-size: 1rem;
-  line-height: 1.25;
+  font-size: 0.9rem;
+  line-height: 1.2;
   overflow-wrap: anywhere;
   white-space: pre-line;
 }
@@ -242,20 +241,20 @@
   gap: 7px;
   min-height: 36px;
   padding: 7px 11px;
-  border: 1px solid rgba(168, 244, 229, 0.35);
+  border: 1.5px solid #66BAB7;
   border-radius: 10px;
   color: #eaf8f4;
-  background: rgba(66, 133, 128, 0.32);
+  background: #0F4C3A;
   font-size: 0.9rem;
-  font-weight: 400;
+  font-weight: 450;
   text-decoration: none;
   transition: background 160ms ease, border-color 160ms ease, transform 160ms ease;
 }
 
 .vendor-card__contract:hover,
 .vendor-card__contract:focus-visible {
-  background: rgba(73, 156, 150, 0.45);
-  border-color: rgba(175, 231, 218, 0.65);
+  background: #0D5661;
+  border-color: #A5DEE4;
   transform: translateY(-1px);
   outline: none;
 }
