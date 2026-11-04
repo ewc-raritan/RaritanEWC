@@ -53,14 +53,24 @@ button {
     border: 0;
 }
 
-.site-header {
-    position: sticky;
-    z-index: 1000;
+site-header {
+    display: block;
+    position: fixed;
     top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+}
+
+.site-header {
     height: 50px;
     background: #4A225D;
     border-bottom: 1px solid rgba(255, 255, 255, 0.15);
     backdrop-filter: blur(14px);
+}
+
+body {
+    padding-top: 50px;
 }
 
 .site-header__inner {
@@ -541,6 +551,10 @@ button {
 
     .site-header {
         height: 52px;
+    }
+
+    body {
+        padding-top: 52px;
     }
 
     .site-header__inner {
