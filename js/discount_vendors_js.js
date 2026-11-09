@@ -1,5 +1,5 @@
 const DISCOUNT_VENDOR_API_URL =
-    "https://script.google.com/macros/s/AKfycby5pD8nlMt62GdcAeHZKTj7cKF4xFOigK_Qhn7JV778mCIbwp0sO2eHKSnIt6TL57ZM/exec?api=DISCOUNT_VENDOR";
+    "https://script.google.com/macros/s/AKfycby4ZEOWazCWdgdVKO33Jsxz0HT0W1T1tiOoJU_pW3als2ARUNDOrTTcvGip1HZybiIDtg/exec?api=DISCOUNT_VENDOR";
 
 const DISCOUNT_VENDOR_API_URL_BK =
     "https://script.google.com/macros/s/AKfycbzApcrcbGcv5sM6o857xlJXzqp_yFg18VPKIVOShRzCeRouhqrK3Q5tgMHG3yXqZN91Pw/exec?api=DISCOUNT_VENDOR";
@@ -8,9 +8,9 @@ const VENDOR_CACHE_KEY = "discount_vendor_cache";
 
 const VENDOR_CACHE_TIME_KEY = "discount_vendor_cache_time";
 
-const CACHE_DURATION = 60 * 60 * 1000;
+const CACHE_DURATION = 30 * 60 * 1000;
 
-const RETRY_DELAY = 1000;
+const RETRY_DELAY = 500;
 
 const VENDOR_LOADING_IMAGE = "assets/icon/loading.webp";
 
